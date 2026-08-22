@@ -1,0 +1,1 @@
+# Investigation workspace module package
