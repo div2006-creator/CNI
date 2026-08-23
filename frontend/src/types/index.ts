@@ -24,6 +24,9 @@ export interface Entity {
   connection_count?: number;
   is_bridge_node?: boolean;
   betweenness_centrality?: number;
+  centrality?: number;
+  role?: string;
+  aliases?: string[];
 }
 
 export type RelationshipType = 

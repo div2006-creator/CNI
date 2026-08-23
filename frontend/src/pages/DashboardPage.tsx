@@ -62,89 +62,89 @@ export const DashboardPage: React.FC = () => {
   const bridgeEntitiesCount = entities.filter(e => e.is_bridge_node).length;
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-8 font-sans">
       {/* Synthetic Demo Banner Notice */}
-      <div className="p-3 bg-dark-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2 text-slate-300">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-          <span className="font-mono text-intel-cyan font-bold uppercase">SIH 2026 DEMO MODE:</span>
-          <span>Investigator decision-support software. All data is synthetic and non-verdict.</span>
+      <div className="p-4 bg-dark-900/90 border border-slate-800/80 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs md:text-sm shadow-md">
+        <div className="flex items-center gap-3 text-slate-300">
+          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+          <span className="font-mono text-intel-cyan font-bold uppercase tracking-wider">SIH 2026 DEMO MODE:</span>
+          <span className="text-slate-300">Investigator decision-support intelligence platform. All network data is synthetic and non-verdict.</span>
         </div>
-        <span className="font-mono text-[10px] text-slate-500 bg-dark-950 px-2 py-0.5 rounded border border-slate-800">
+        <span className="font-mono text-xs text-slate-400 bg-dark-950 px-3 py-1 rounded-lg border border-slate-800/80 font-semibold">
           v2.0 Coordinated Architecture
         </span>
       </div>
 
       {/* SECTION A: INVESTIGATION OVERVIEW METRICS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Active Cases</p>
-              <h3 className="text-xl font-bold text-slate-100 font-mono mt-0.5">{investigations.length}</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Active Cases</p>
+              <h3 className="text-2xl font-bold text-slate-100 font-mono">{investigations.length}</h3>
             </div>
-            <div className="p-2 bg-emerald-950/60 border border-emerald-800 rounded-lg text-emerald-400">
-              <Briefcase className="w-5 h-5" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Entities Analyzed</p>
-              <h3 className="text-xl font-bold text-slate-100 font-mono mt-0.5">{entities.length}</h3>
-            </div>
-            <div className="p-2 bg-cyan-950/60 border border-cyan-800 rounded-lg text-cyan-400">
-              <Users className="w-5 h-5" />
+            <div className="p-3 bg-emerald-950/60 border border-emerald-800/80 rounded-xl text-emerald-400 shadow-inner">
+              <Briefcase className="w-6 h-6" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Relationships</p>
-              <h3 className="text-xl font-bold text-slate-100 font-mono mt-0.5">{relationships.length}</h3>
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Entities Analyzed</p>
+              <h3 className="text-2xl font-bold text-slate-100 font-mono">{entities.length}</h3>
             </div>
-            <div className="p-2 bg-purple-950/60 border border-purple-800 rounded-lg text-purple-400">
-              <Share2 className="w-5 h-5" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Hidden Paths</p>
-              <h3 className="text-xl font-bold text-intel-cyan font-mono mt-0.5">3</h3>
-            </div>
-            <div className="p-2 bg-indigo-950/60 border border-indigo-800 rounded-lg text-intel-cyan">
-              <Waypoints className="w-5 h-5" />
+            <div className="p-3 bg-cyan-950/60 border border-cyan-800/80 rounded-xl text-cyan-400 shadow-inner">
+              <Users className="w-6 h-6" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Anomalies</p>
-              <h3 className="text-xl font-bold text-rose-400 font-mono mt-0.5">{alerts.length}</h3>
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Relationships</p>
+              <h3 className="text-2xl font-bold text-slate-100 font-mono">{relationships.length}</h3>
             </div>
-            <div className="p-2 bg-rose-950/60 border border-rose-800 rounded-lg text-rose-400">
-              <ShieldAlert className="w-5 h-5" />
+            <div className="p-3 bg-purple-950/60 border border-purple-800/80 rounded-xl text-purple-400 shadow-inner">
+              <Share2 className="w-6 h-6" />
             </div>
           </div>
         </Card>
 
-        <Card className="p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400">Evidence Items</p>
-              <h3 className="text-xl font-bold text-emerald-400 font-mono mt-0.5">{evidenceList.length}</h3>
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Hidden Paths</p>
+              <h3 className="text-2xl font-bold text-intel-cyan font-mono">3</h3>
             </div>
-            <div className="p-2 bg-emerald-950/60 border border-emerald-800 rounded-lg text-emerald-400">
-              <FileCheck2 className="w-5 h-5" />
+            <div className="p-3 bg-indigo-950/60 border border-indigo-800/80 rounded-xl text-intel-cyan shadow-inner">
+              <Waypoints className="w-6 h-6" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Anomalies</p>
+              <h3 className="text-2xl font-bold text-rose-400 font-mono">{alerts.length}</h3>
+            </div>
+            <div className="p-3 bg-rose-950/60 border border-rose-800/80 rounded-xl text-rose-400 shadow-inner">
+              <ShieldAlert className="w-6 h-6" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-1">
+          <div className="p-4 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">Evidence Vault</p>
+              <h3 className="text-2xl font-bold text-emerald-400 font-mono">{evidenceList.length}</h3>
+            </div>
+            <div className="p-3 bg-emerald-950/60 border border-emerald-800/80 rounded-xl text-emerald-400 shadow-inner">
+              <FileCheck2 className="w-6 h-6" />
             </div>
           </div>
         </Card>
@@ -158,19 +158,19 @@ export const DashboardPage: React.FC = () => {
             title="Network Intelligence Topology Map"
             subtitle="Interactive Cytoscape.js visualization showing bridge entities (gold glow) and cross-group links."
             action={
-              <Link to="/investigations/case-801" className="text-xs font-mono text-intel-cyan hover:underline flex items-center gap-1">
+              <Link to="/investigations/case-801" className="text-xs font-mono text-intel-cyan hover:underline flex items-center gap-1.5 font-semibold bg-intel-cyan/10 px-3 py-1.5 rounded-lg border border-intel-cyan/30">
                 Open 4-Pane Workspace <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             }
           >
-            {graphData && <CytoscapeGraph graphData={graphData} height="440px" />}
+            {graphData && <CytoscapeGraph graphData={graphData} height="480px" />}
           </Card>
         </div>
 
         {/* SECTION D: RECENT INVESTIGATION ACTIVITY FEED */}
         <div className="space-y-4">
-          <Card title="Recent Investigation Activity">
-            <div className="space-y-3">
+          <Card title="Recent Activity Feed" subtitle="Real-time audit log of investigator actions & AI inferences.">
+            <div className="space-y-3.5">
               {[
                 { time: '10 mins ago', action: 'Entity Reviewed', target: 'Subject Alpha (person-101)', investigator: 'Senior Investigator Miller' },
                 { time: '25 mins ago', action: 'Relationship Inspected', target: 'Bank Account #SYN-994021 → Crypto Wallet', investigator: 'Senior Investigator Miller' },
@@ -178,13 +178,13 @@ export const DashboardPage: React.FC = () => {
                 { time: '2 hours ago', action: 'What-If Executed', target: 'Simulated Removal of Subject Bravo (person-102)', investigator: 'Senior Investigator Miller' },
                 { time: '3 hours ago', action: 'Report Generated', target: 'Operation NorthStar Briefing PDF', investigator: 'Senior Investigator Miller' },
               ].map((act, i) => (
-                <div key={i} className="p-3 bg-dark-950 border border-slate-800/80 rounded-xl space-y-1 text-xs">
-                  <div className="flex items-center justify-between text-[10px] font-mono">
-                    <span className="text-intel-cyan font-bold">{act.action}</span>
-                    <span className="text-slate-500">{act.time}</span>
+                <div key={i} className="p-4 bg-dark-950/80 border border-slate-800/80 rounded-xl space-y-1.5 transition-all hover:border-slate-700/80">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-intel-cyan font-bold bg-intel-cyan/10 px-2 py-0.5 rounded border border-intel-cyan/30">{act.action}</span>
+                    <span className="text-slate-400">{act.time}</span>
                   </div>
-                  <h5 className="font-semibold text-slate-200">{act.target}</h5>
-                  <p className="text-[10px] font-mono text-slate-400">By: {act.investigator}</p>
+                  <h5 className="font-semibold text-slate-100 text-sm leading-snug">{act.target}</h5>
+                  <p className="text-xs font-mono text-slate-400">Investigator: <span className="text-slate-300 font-semibold">{act.investigator}</span></p>
                 </div>
               ))}
             </div>
@@ -197,25 +197,27 @@ export const DashboardPage: React.FC = () => {
         title="Investigation Alerts & Pattern Findings"
         subtitle="Non-verdict pattern anomalies flagged for investigator decision support."
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {alerts.map((alr) => (
-            <div key={alr.id} className="p-4 bg-dark-950 border border-slate-800 rounded-xl space-y-3">
-              <div className="flex items-center justify-between text-xs">
+            <div key={alr.id} className="p-5 bg-dark-950/80 border border-slate-800/80 rounded-2xl space-y-4 hover:border-slate-700/80 transition-all">
+              <div className="flex items-center justify-between gap-2">
                 <Badge label={alr.severity} variant="severity" typeValue={alr.severity} size="sm" />
-                <span className="font-mono text-[10px] text-slate-400">{alr.pattern_type}</span>
+                <span className="font-mono text-xs text-slate-400 bg-dark-900 px-2.5 py-1 rounded-md border border-slate-800/80 font-semibold">{alr.pattern_type}</span>
               </div>
-              <h4 className="font-bold text-slate-100 text-sm">{alr.title}</h4>
-              <p className="text-xs text-slate-300 leading-relaxed">{alr.description}</p>
+              <div>
+                <h4 className="font-bold text-slate-100 text-base mb-1.5">{alr.title}</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">{alr.description}</p>
+              </div>
               
               {/* Explainable Why */}
-              <div className="p-2.5 bg-dark-900 border border-slate-800 rounded-lg text-xs space-y-1 font-mono text-[11px]">
-                <span className="text-intel-cyan font-semibold block">Explainability Reason:</span>
-                <span className="text-slate-400">{alr.explanation}</span>
+              <div className="p-3.5 bg-dark-900/90 border border-slate-800/80 rounded-xl space-y-1.5 font-sans text-xs">
+                <span className="text-intel-cyan font-mono font-bold uppercase tracking-wider block text-[11px]">Explainability Reason:</span>
+                <p className="text-slate-300 leading-relaxed">{alr.explanation}</p>
               </div>
 
-              <div className="pt-2 border-t border-slate-900 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Confidence: <strong className="text-emerald-400">{(alr.risk_score * 100).toFixed(0)}%</strong></span>
-                <Link to="/investigations/case-801" className="text-intel-cyan hover:underline font-semibold">
+              <div className="pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs font-mono">
+                <span className="text-slate-400">Confidence Score: <strong className="text-emerald-400 font-bold text-sm">{(alr.risk_score * 100).toFixed(0)}%</strong></span>
+                <Link to="/investigations/case-801" className="text-intel-cyan hover:underline font-bold flex items-center gap-1 bg-intel-cyan/10 px-3 py-1.5 rounded-lg border border-intel-cyan/30">
                   Inspect in Workspace &rarr;
                 </Link>
               </div>

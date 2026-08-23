@@ -28,7 +28,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-6 lg:p-8 max-w-[1700px] w-full mx-auto overflow-y-auto">
           {children}
         </main>
       </div>

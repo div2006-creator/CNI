@@ -32,14 +32,14 @@ export const CopilotPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 font-sans">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Bot className="w-6 h-6 text-intel-cyan" /> Graph-Aware Investigator Copilot
+          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
+            <Bot className="w-7 h-7 text-intel-cyan" /> Graph-Aware Investigator Copilot
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
             Query the temporal graph, discover indirect links, and analyze evidence provenance using plain language.
           </p>
         </div>
@@ -47,18 +47,18 @@ export const CopilotPage: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chat / Query Panel (2 Cols) */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-5">
           {/* Sample Prompts */}
-          <div className="p-3 bg-dark-900 border border-slate-800 rounded-xl space-y-2">
-            <span className="text-[11px] font-mono uppercase text-slate-400 font-semibold flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-intel-cyan" /> Suggested Graph Queries
+          <div className="p-5 bg-dark-900/90 border border-slate-800/80 rounded-2xl space-y-3 shadow-md">
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-intel-cyan" /> Suggested Graph Queries
             </span>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
               {sampleQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleAsk(q)}
-                  className="px-3 py-1.5 bg-dark-950 hover:bg-dark-850 border border-slate-800 hover:border-intel-cyan/40 text-xs font-sans text-slate-300 rounded-lg transition-all text-left"
+                  className="px-4 py-2 bg-dark-950/90 hover:bg-dark-850 border border-slate-800/80 hover:border-intel-cyan/50 text-xs font-sans font-semibold text-slate-200 rounded-xl transition-all text-left shadow-sm"
                 >
                   &quot;{q}&quot;
                 </button>
@@ -77,12 +77,12 @@ export const CopilotPage: React.FC = () => {
                 placeholder="Ask Copilot about graph paths, evidence, or bridge entities..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-dark-950 border border-slate-800 rounded-lg px-4 py-2.5 text-xs font-sans text-slate-200 focus:border-intel-cyan/50"
+                className="flex-1 bg-dark-950/90 border border-slate-800 rounded-xl px-4 py-3 text-sm font-sans text-slate-200 focus:outline-none focus:border-intel-cyan/50"
               />
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="px-4 py-2.5 bg-intel-cyan text-dark-950 font-mono text-xs font-bold rounded-lg hover:bg-cyan-300 transition-colors flex items-center gap-2 disabled:opacity-50"
+                className="px-5 py-3 bg-intel-cyan text-dark-950 font-mono text-xs font-bold rounded-xl hover:bg-cyan-300 transition-all flex items-center gap-2 disabled:opacity-50 shadow-md shrink-0"
               >
                 <Send className="w-4 h-4" /> {loading ? 'Analyzing...' : 'Ask Assistant'}
               </button>
@@ -90,27 +90,27 @@ export const CopilotPage: React.FC = () => {
           </Card>
 
           {/* Assistant Responses Feed */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             {copilotHistory.map((res, i) => (
               <Card key={i} className="border-intel-cyan/40">
-                <div className="space-y-3 font-sans text-xs">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <span className="font-mono text-xs font-bold text-intel-cyan">&quot;{res.query}&quot;</span>
-                    <span className="font-mono text-[10px] text-slate-500">Confidence: {(res.confidence * 100).toFixed(0)}%</span>
+                <div className="space-y-4 font-sans">
+                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                    <span className="font-mono text-sm font-bold text-intel-cyan bg-intel-cyan/10 px-3 py-1 rounded-lg border border-intel-cyan/30">&quot;{res.query}&quot;</span>
+                    <span className="font-mono text-xs text-slate-400">Confidence Score: <strong className="text-emerald-400 font-bold">{(res.confidence * 100).toFixed(0)}%</strong></span>
                   </div>
 
-                  <p className="text-slate-200 text-sm leading-relaxed bg-dark-950 p-3 rounded-lg border border-slate-800">
+                  <div className="p-5 bg-dark-950/90 border border-slate-800/90 rounded-xl text-sm md:text-base text-slate-100 leading-relaxed shadow-inner">
                     {res.answer}
-                  </p>
+                  </div>
 
                   {/* Reasoning Chain */}
-                  <div>
-                    <h5 className="font-mono text-[10px] uppercase text-slate-400 mb-1 flex items-center gap-1">
-                      <Cpu className="w-3.5 h-3.5 text-intel-cyan" /> Graph Topology Reasoning Chain
+                  <div className="space-y-2">
+                    <h5 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                      <Cpu className="w-4 h-4 text-intel-cyan" /> Graph Topology Reasoning Chain
                     </h5>
-                    <ul className="space-y-1 bg-dark-950 p-2.5 rounded-lg border border-slate-800/80 font-mono text-[11px] text-slate-300">
+                    <ul className="space-y-2 bg-dark-950/90 p-4 rounded-xl border border-slate-800/80 font-mono text-xs text-slate-200">
                       {res.reasoning.map((r, idx) => (
-                        <li key={idx} className="flex items-center gap-2">
+                        <li key={idx} className="flex items-center gap-2.5">
                           <span className="text-intel-cyan font-bold">&bull;</span> {r}
                         </li>
                       ))}
@@ -118,9 +118,9 @@ export const CopilotPage: React.FC = () => {
                   </div>
 
                   {/* Evidence Citations */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-900 text-[11px] font-mono">
-                    <span className="text-slate-400">Supporting Evidence: <strong className="text-emerald-400">{res.supporting_evidence_ids.join(', ')}</strong></span>
-                    <span className="text-intel-cyan font-semibold cursor-pointer">Inspect Citations &rarr;</span>
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 text-xs font-mono">
+                    <span className="text-slate-400">Supporting Evidence: <strong className="text-emerald-400 font-bold">{res.supporting_evidence_ids.join(', ')}</strong></span>
+                    <span className="text-intel-cyan font-bold cursor-pointer hover:underline bg-intel-cyan/10 px-3 py-1 rounded-lg border border-intel-cyan/30">Inspect Citations &rarr;</span>
                   </div>
                 </div>
               </Card>
@@ -130,23 +130,23 @@ export const CopilotPage: React.FC = () => {
 
         {/* Side Panel: Copilot Guardrails */}
         <div className="space-y-4">
-          <Card title="Copilot System Guardrails">
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-dark-950 border border-slate-800 rounded-lg space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-emerald-400">
+          <Card title="Copilot System Guardrails" subtitle="Architectural decision boundaries.">
+            <div className="space-y-4 text-xs font-sans">
+              <div className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-1.5">
+                <div className="flex items-center gap-2 font-bold text-emerald-400 text-sm">
                   <CheckCircle2 className="w-4 h-4" /> Grounded in Knowledge Graph
                 </div>
-                <p className="text-[11px] text-slate-400 leading-snug">
-                  The assistant queries Neo4j/Mock temporal graph data and verified evidence records. It does not invent facts.
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  The assistant queries Neo4j/Mock temporal graph data and verified evidence records. It strictly refrains from hallucinating unbacked facts.
                 </p>
               </div>
 
-              <div className="p-3 bg-dark-950 border border-slate-800 rounded-lg space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-intel-cyan">
+              <div className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-1.5">
+                <div className="flex items-center gap-2 font-bold text-intel-cyan text-sm">
                   <CheckCircle2 className="w-4 h-4" /> Decision Support Only
                 </div>
-                <p className="text-[11px] text-slate-400 leading-snug">
-                  All Copilot outputs are leads requiring investigator verification before official filing.
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  All Copilot outputs are leads requiring human-in-the-loop investigator verification before official filing or action.
                 </p>
               </div>
             </div>

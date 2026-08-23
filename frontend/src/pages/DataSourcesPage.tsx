@@ -40,58 +40,58 @@ export const DataSourcesPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 font-sans">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <Database className="w-6 h-6 text-intel-cyan" /> Data Sources & Ingestion Feeds
+          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
+            <Database className="w-7 h-7 text-intel-cyan" /> Data Sources & Ingestion Feeds
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
             Overview of structured financial logs, call telemetry metadata, and unstructured intelligence feeds.
           </p>
         </div>
-        <button className="flex items-center gap-2 px-3.5 py-2 bg-intel-cyan/10 hover:bg-intel-cyan/20 border border-intel-cyan/40 text-intel-cyan text-xs font-mono font-semibold rounded-lg transition-all">
+        <button className="flex items-center gap-2 px-4 py-2.5 bg-intel-cyan/10 hover:bg-intel-cyan/20 border border-intel-cyan/40 text-intel-cyan text-xs font-mono font-bold rounded-xl transition-all shadow-sm">
           <Plus className="w-4 h-4" /> Connect Data Feed
         </button>
       </div>
 
       {/* Sources Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {sources.map((src) => (
-          <Card key={src.id} className="border-slate-800/80">
-            <div className="space-y-4">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-dark-950 border border-slate-800 rounded-xl">
+          <Card key={src.id} className="border-slate-800/80 hover:border-slate-700">
+            <div className="space-y-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3.5">
+                  <div className="p-3 bg-dark-950/90 border border-slate-800/80 rounded-2xl shadow-inner">
                     {getSourceIcon(src.source_type)}
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-100">{src.name}</h3>
-                    <span className="text-[10px] font-mono text-slate-500">{src.source_type}</span>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-slate-100">{src.name}</h3>
+                    <span className="text-xs font-mono text-slate-400 bg-dark-950 px-2 py-0.5 rounded border border-slate-800/80">{src.source_type}</span>
                   </div>
                 </div>
                 <Badge label={src.status} variant="status" typeValue={src.status} size="sm" />
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">{src.description}</p>
+              <p className="text-xs md:text-sm text-slate-300 leading-relaxed">{src.description}</p>
 
               {/* Confidence & Records Stats */}
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-900 font-mono text-xs">
-                <div className="bg-dark-950 p-2.5 rounded-lg border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Confidence Rating</span>
-                  <span className="text-slate-200 font-bold">{(src.confidence_score * 100).toFixed(0)}%</span>
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800/80 font-mono text-xs">
+                <div className="bg-dark-950/90 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+                  <span className="intel-data-label">Confidence Rating</span>
+                  <span className="text-slate-100 font-bold text-base">{(src.confidence_score * 100).toFixed(0)}%</span>
                 </div>
-                <div className="bg-dark-950 p-2.5 rounded-lg border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Ingested Records</span>
-                  <span className="text-intel-cyan font-bold">{src.records_ingested.toLocaleString()}</span>
+                <div className="bg-dark-950/90 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+                  <span className="intel-data-label">Ingested Records</span>
+                  <span className="text-intel-cyan font-bold text-base">{src.records_ingested.toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center">
-                <span>Last Ingested: {new Date(src.last_ingested_at).toLocaleTimeString()}</span>
-                <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" /> Validated
+              <div className="text-xs font-mono text-slate-400 flex justify-between items-center pt-1">
+                <span>Last Sync: <strong className="text-slate-200">{new Date(src.last_ingested_at).toLocaleTimeString()}</strong></span>
+                <span className="text-emerald-400 font-bold flex items-center gap-1.5 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-800/80">
+                  <CheckCircle className="w-3.5 h-3.5" /> Pipeline Validated
                 </span>
               </div>
             </div>

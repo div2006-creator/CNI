@@ -17,22 +17,22 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   const isCalc = type === 'calculated';
 
   return (
-    <div className="p-3 bg-dark-950 border border-slate-800 rounded-xl space-y-1">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-mono uppercase text-slate-400 font-semibold">{label}</span>
+    <div className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-2 hover:border-slate-700/80 transition-all">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">{label}</span>
         <span
-          className={`px-1.5 py-0.5 text-[9px] font-mono font-bold rounded flex items-center gap-1 ${
+          className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-md flex items-center gap-1 shrink-0 ${
             isCalc
-              ? 'bg-cyan-950 text-cyan-400 border border-cyan-800'
-              : 'bg-purple-950 text-purple-400 border border-purple-800'
+              ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-800/80'
+              : 'bg-purple-950/80 text-purple-400 border border-purple-800/80'
           }`}
         >
-          {isCalc ? <Calculator className="w-2.5 h-2.5" /> : <Cpu className="w-2.5 h-2.5" />}
+          {isCalc ? <Calculator className="w-3 h-3" /> : <Cpu className="w-3 h-3" />}
           {isCalc ? 'Graph Metric' : 'AI Inference'}
         </span>
       </div>
-      <div className="text-base font-bold font-mono text-slate-100">{value}</div>
-      {description && <p className="text-[10px] text-slate-500 font-sans leading-tight">{description}</p>}
+      <div className="text-xl font-bold font-mono text-slate-100">{value}</div>
+      {description && <p className="text-xs text-slate-400 font-sans leading-relaxed">{description}</p>}
     </div>
   );
 };

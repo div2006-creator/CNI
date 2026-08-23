@@ -27,50 +27,54 @@ export const AuditPage: React.FC = () => {
   if (loading) return <LoadingSpinner message="Querying immutable audit log trail..." />;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 font-sans">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <History className="w-6 h-6 text-intel-cyan" /> Investigator Audit Trail Log
+          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
+            <History className="w-7 h-7 text-intel-cyan" /> Investigator Audit Trail Log
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
             Tamper-evident log of all investigative searches, evidence inspections, what-if executions, and report generations.
           </p>
         </div>
       </div>
 
-      <Card>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-dark-950 border-b border-slate-800 text-slate-400 font-mono uppercase text-[10px]">
+      <Card title="Immutable Audit Event Ledger" subtitle="Tamper-proof chronological records for chain-of-custody compliance.">
+        <div className="intel-table-container">
+          <table className="intel-table">
+            <thead>
               <tr>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Investigator ID</th>
-                <th className="py-3 px-4">Action Type</th>
-                <th className="py-3 px-4">Target Resource</th>
-                <th className="py-3 px-4">Details</th>
+                <th>Timestamp (UTC)</th>
+                <th>Investigator ID</th>
+                <th>Action Type</th>
+                <th>Target Resource</th>
+                <th>Audit Context Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300 font-mono">
+            <tbody className="font-mono text-xs">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-dark-850/60 transition-colors">
-                  <td className="py-3 px-4 text-slate-400 text-[11px]">
+                <tr key={log.id} className="hover:bg-dark-850/80 transition-colors">
+                  <td className="text-slate-400 font-semibold">
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
-                  <td className="py-3 px-4 font-semibold text-intel-cyan">
+                  <td className="font-bold text-intel-cyan">
                     {log.investigator_id}
                   </td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 bg-dark-950 border border-slate-800 rounded text-slate-200 text-[10px]">
+                  <td>
+                    <span className="px-2.5 py-1 bg-intel-cyan/10 border border-intel-cyan/30 rounded-md text-intel-cyan text-xs font-bold">
                       {log.action_type}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-slate-200">
+                  <td className="font-semibold text-slate-100 font-sans">
                     {log.target_resource}
                   </td>
-                  <td className="py-3 px-4 text-[10px] text-slate-400">
-                    {JSON.stringify(log.details)}
+                  <td className="text-slate-400 text-xs font-sans">
+                    {typeof log.details === 'object' ? (
+                      <span className="px-2 py-1 bg-dark-950 border border-slate-800/80 rounded-md inline-block font-mono text-[11px] text-slate-300">
+                        {JSON.stringify(log.details)}
+                      </span>
+                    ) : log.details}
                   </td>
                 </tr>
               ))}
