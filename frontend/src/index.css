@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-950 text-slate-200 selection:bg-intel-blue/20 selection:text-intel-cyan;
+    background-image: radial-gradient(#dfe5ed 0.7px, transparent 0.7px);
+    background-size: 14px 14px;
+    font-family: 'IBM Plex Sans', Aptos, sans-serif;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f3f7;
+}
+::-webkit-scrollbar-thumb {
+  background: #aab6c5;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #63738b;
+}
+
+/* Glassmorphism Cards */
+.intel-card {
+  @apply bg-dark-900/95 border border-slate-800/80 rounded-xl shadow-sm backdrop-blur-md transition-all duration-200;
+}
+
+.intel-card-hover {
+  @apply hover:border-slate-700/80 hover:shadow-cyan-950/20 hover:shadow-2xl;
+}
+
+.intel-glass-input {
+  @apply bg-dark-900 border border-slate-800 rounded-lg text-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:border-intel-blue/50 focus:ring-1 focus:ring-intel-blue/20 placeholder:text-slate-500 transition-all;
+}
+
+/* Structured Data Layout Helper Utilities */
+.intel-data-box {
+  @apply p-4 bg-dark-950/80 border border-slate-800/80 rounded-xl transition-all;
+}
+
+.intel-data-label {
+  @apply text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold mb-1 block;
+}
+
+.intel-data-value {
+  @apply text-sm font-sans font-semibold text-slate-100;
+}
+
+.intel-table-container {
+  @apply overflow-x-auto rounded-xl border border-slate-800/80 bg-dark-900/50;
+}
+
+.intel-table {
+  @apply w-full text-left text-sm font-sans;
+}
+
+.intel-table th {
+  @apply py-3.5 px-5 bg-dark-950 text-slate-400 font-mono text-xs uppercase tracking-wider border-b border-slate-800/80 font-semibold;
+}
+
+.intel-table td {
+  @apply py-4 px-5 border-b border-slate-800/40 text-slate-200 text-sm align-middle;
+}
+
+.intel-table tr:last-child td {
+  @apply border-b-0;
+}
+
