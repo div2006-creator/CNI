@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useInvestigation } from '../../context/InvestigationContext';
 import { CytoscapeGraph } from '../graph/CytoscapeGraph';
 import { NetworkLegend } from './NetworkLegend';
+import { NetworkToolbar } from './NetworkToolbar';
 
 interface NetworkGraphProps {
   height?: string;
@@ -9,6 +10,7 @@ interface NetworkGraphProps {
 
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({ height = '100%' }) => {
   const { graphData, selectedEntityId, selectEntity, filterState } = useInvestigation();
+  const [layoutName, setLayoutName] = useState<string>('cose');
 
   if (!graphData) return <div className="h-full bg-[#f8f6f0] flex items-center justify-center text-stone-500 font-mono text-xs">Loading graph canvas...</div>;
 
