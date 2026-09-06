@@ -1,13 +1,47 @@
+import datetime
 from typing import List, Dict, Any, Optional
 from collections import deque
 from app.graph.abstract import AbstractGraphDriver
+from app.utils.normalization import normalize_entity_identifier, normalize_phone, normalize_upi, normalize_account, normalize_vehicle
 from data.synthetic.seed_data import get_synthetic_dataset
 
 class MockInMemoryGraphDriver(AbstractGraphDriver):
     def __init__(self):
         dataset = get_synthetic_dataset()
-        self.nodes: Dict[str, Dict[str, Any]] = {n["id"]: n for n in dataset["nodes"]}
-        self.edges: Dict[str, Dict[str, Any]] = {e["id"]: e for e in dataset["relationships"]}
+        self.nodes: Dict[str, Dict[str, Any]] = {n["id"]: dict(n) for n in dataset["nodes"]}
+        self.edges: Dict[str, Dict[str, Any]] = {e["id"]: dict(e) for e in dataset["relationships"]}
+        self.normalized_index: Dict[str, str] = {} # Key: "TYPE:normalized_val" -> node_id
+
+        # Populate normalization index for initial seed dataset
+        for node_id, node in self.nodes.items():
+            self._index_node(node)
+
+    def _get_node_lookup_key(self, node: Dict[str, Any]) -> Optional[str]:
+        ntype = (node.get("type") or "").upper()
+        # Look for explicit identifier or attribute values
+        raw_val = node.get("identifier")
+        if not raw_val and "attributes" in node and isinstance(node["attributes"], dict):
+            raw_val = (
+                node["attributes"].get("number") or
+                node["attributes"].get("phone") or
+                node["attributes"].get("upi_id") or
+                node["attributes"].get("account_number") or
+                node["attributes"].get("plate") or
+                node["attributes"].get("reg_number")
+            )
+        if not raw_val:
+            raw_val = node.get("name")
+
+        if ntype and raw_val:
+            norm_val = normalize_entity_identifier(ntype, str(raw_val))
+            if norm_val:
+                return f"{ntype}:{norm_val}"
+        return None
+
+    def _index_node(self, node: Dict[str, Any]):
+        key = self._get_node_lookup_key(node)
+        if key:
+            self.normalized_index[key] = node["id"]
 
     def get_network_graph(self, entity_types: Optional[List[str]] = None, min_risk: float = 0.0) -> Dict[str, Any]:
         filtered_nodes = []
@@ -16,7 +50,7 @@ class MockInMemoryGraphDriver(AbstractGraphDriver):
         for node_id, node in self.nodes.items():
             if entity_types and node["type"] not in entity_types:
                 continue
-            if node["risk_score"] < min_risk:
+            if node.get("risk_score", 0.0) < min_risk:
                 continue
             filtered_nodes.append(node)
             filtered_node_ids.add(node_id)
@@ -122,10 +156,158 @@ class MockInMemoryGraphDriver(AbstractGraphDriver):
 
         return {"found": False, "path_nodes": [], "path_edges": [], "distance": -1}
 
+    def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Upserts an entity node into memory graph. Normalizes identifiers, deduplicates,
+        merges attributes and tags, and maintains multi-source provenance.
+        """
+        now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        
+        # 1. Normalize identifier & check existing match
+        node_type = (node_data.get("type") or "UNKNOWN").upper()
+        raw_identifier = node_data.get("identifier") or node_data.get("name") or node_data.get("id")
+        norm_val = normalize_entity_identifier(node_type, str(raw_identifier)) if raw_identifier else ""
+        
+        lookup_key = f"{node_type}:{norm_val}" if norm_val else None
+        
+        existing_id = None
+        if node_data.get("id") and node_data["id"] in self.nodes:
+            existing_id = node_data["id"]
+        elif lookup_key and lookup_key in self.normalized_index:
+            existing_id = self.normalized_index[lookup_key]
+
+        if existing_id:
+            # UPDATE / MERGE existing node
+            existing_node = self.nodes[existing_id]
+            
+            # Merge attributes
+            existing_attrs = existing_node.get("attributes", {})
+            new_attrs = node_data.get("attributes", {})
+            existing_attrs.update(new_attrs)
+            if norm_val:
+                existing_attrs["normalized_identifier"] = norm_val
+            existing_node["attributes"] = existing_attrs
+
+            # Merge tags
+            existing_tags = set(existing_node.get("tags", []))
+            existing_tags.update(node_data.get("tags", []))
+            existing_node["tags"] = list(existing_tags)
+
+            # Multi-source provenance
+            source_ids = set(existing_node.get("source_ids", []))
+            if "source_id" in node_data and node_data["source_id"]:
+                source_ids.add(node_data["source_id"])
+            if "source_ids" in node_data:
+                source_ids.update(node_data["source_ids"])
+            existing_node["source_ids"] = list(source_ids)
+
+            # Update risk score if higher
+            if "risk_score" in node_data:
+                existing_node["risk_score"] = max(existing_node.get("risk_score", 0.0), float(node_data["risk_score"]))
+            if "risk_level" in node_data and node_data["risk_level"]:
+                existing_node["risk_level"] = node_data["risk_level"]
+
+            existing_node["updated_at"] = now
+            return existing_node
+
+        else:
+            # INSERT new node
+            new_node = dict(node_data)
+            if "id" not in new_node or not new_node["id"]:
+                import uuid
+                new_node["id"] = f"{node_type.lower()}-{str(uuid.uuid4())[:8]}"
+
+            if "attributes" not in new_node or not isinstance(new_node["attributes"], dict):
+                new_node["attributes"] = {}
+            if norm_val:
+                new_node["attributes"]["normalized_identifier"] = norm_val
+
+            if "tags" not in new_node:
+                new_node["tags"] = []
+
+            source_ids = set(new_node.get("source_ids", []))
+            if "source_id" in new_node and new_node["source_id"]:
+                source_ids.add(new_node["source_id"])
+            new_node["source_ids"] = list(source_ids)
+
+            new_node["created_at"] = new_node.get("created_at", now)
+            new_node["updated_at"] = now
+
+            self.nodes[new_node["id"]] = new_node
+            if lookup_key:
+                self.normalized_index[lookup_key] = new_node["id"]
+            return new_node
+
+    def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Upserts a relationship edge. Deduplicates based on (source_id, target_id, type) or ID,
+        merges attributes, updates weight/confidence, and tracks multi-source provenance.
+        """
+        now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        
+        src_id = edge_data.get("source_id")
+        tgt_id = edge_data.get("target_id")
+        rel_type = (edge_data.get("type") or "ASSOCIATED_WITH").upper()
+
+        existing_edge_id = None
+        if edge_data.get("id") and edge_data["id"] in self.edges:
+            existing_edge_id = edge_data["id"]
+        else:
+            # Search for existing relationship between src and tgt of same type
+            for eid, edge in self.edges.items():
+                if edge.get("source_id") == src_id and edge.get("target_id") == tgt_id and edge.get("type") == rel_type:
+                    existing_edge_id = eid
+                    break
+
+        if existing_edge_id:
+            existing_edge = self.edges[existing_edge_id]
+
+            # Merge attributes
+            existing_attrs = existing_edge.get("attributes", {})
+            existing_attrs.update(edge_data.get("attributes", {}))
+            existing_edge["attributes"] = existing_attrs
+
+            # Update confidence/weight
+            if "confidence" in edge_data:
+                existing_edge["confidence"] = max(existing_edge.get("confidence", 0.0), float(edge_data["confidence"]))
+            if "weight" in edge_data:
+                existing_edge["weight"] = max(existing_edge.get("weight", 0.0), float(edge_data["weight"]))
+
+            # Merge multi-source evidence / source_ids
+            evidence_ids = set(existing_edge.get("evidence_ids", []))
+            if "evidence_id" in edge_data and edge_data["evidence_id"]:
+                evidence_ids.add(edge_data["evidence_id"])
+            if "evidence_ids" in edge_data:
+                evidence_ids.update(edge_data["evidence_ids"])
+            existing_edge["evidence_ids"] = list(evidence_ids)
+
+            existing_edge["updated_at"] = now
+            return existing_edge
+
+        else:
+            new_edge = dict(edge_data)
+            if "id" not in new_edge or not new_edge["id"]:
+                import uuid
+                new_edge["id"] = f"rel-{str(uuid.uuid4())[:8]}"
+
+            if "attributes" not in new_edge or not isinstance(new_edge["attributes"], dict):
+                new_edge["attributes"] = {}
+
+            evidence_ids = set(new_edge.get("evidence_ids", []))
+            if "evidence_id" in new_edge and new_edge["evidence_id"]:
+                evidence_ids.add(new_edge["evidence_id"])
+            new_edge["evidence_ids"] = list(evidence_ids)
+
+            new_edge["type"] = rel_type
+            new_edge["created_at"] = new_edge.get("created_at", now)
+            new_edge["updated_at"] = now
+
+            self.edges[new_edge["id"]] = new_edge
+            return new_edge
+
     def add_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
-        self.nodes[node_data["id"]] = node_data
-        return node_data
+        return self.upsert_node(node_data)
 
     def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
-        self.edges[edge_data["id"]] = edge_data
-        return edge_data
+        return self.upsert_edge(edge_data)
+

@@ -392,6 +392,26 @@ def get_synthetic_dataset():
             "source_id": "REG-SYN-882",
             "evidence_id": "ev-002",
             "attributes": {}
+        },
+        {
+            "id": "rel-14",
+            "source_id": "person-101",
+            "target_id": "person-104",
+            "type": "ASSOCIATED_WITH",
+            "confidence": 0.74,
+            "weight": 0.85,
+            "start_time": t_minus_30d,
+            "end_time": None,
+            "timestamp": t_minus_10d,
+            "source_type": "CDR",
+            "source_id": "CDR-VOIP-019",
+            "evidence_id": "ev-005",
+            "attributes": {
+                "call_count_30d": 18,
+                "co_location_events": 4,
+                "amount": "$500,000 via Shell Co",
+                "location_mismatch": "Location mismatch recorded on Aug 17 (Cell tower hit mismatch)"
+            }
         }
     ]
 
@@ -444,8 +464,21 @@ def get_synthetic_dataset():
             "extraction_method": "TELEMETRY_LOG",
             "linked_entity_ids": ["person-101", "person-102", "phone-401", "phone-402"],
             "linked_relationship_ids": ["rel-06", "rel-07", "rel-08"]
+        },
+        {
+            "id": "ev-005",
+            "title": "Combined CDR & Geospatial Surveillance Record INTEL-2026-912",
+            "source_type": "INTELLIGENCE_REPORT",
+            "source_id": "INTEL-2026-912",
+            "content_snippet": "Subject Alpha and Subject Delta exhibit high communication frequency and joint financial entity involvement, but a location mismatch was logged on Aug 17 where Subject Alpha hit Sector 4 tower while Subject Delta hit Offshore roaming gateway.",
+            "confidence": 0.74,
+            "timestamp": t_minus_10d,
+            "extraction_method": "AUTOMATED_NLP",
+            "linked_entity_ids": ["person-101", "person-104"],
+            "linked_relationship_ids": ["rel-14"]
         }
     ]
+
 
     # Entity Resolution Candidates
     resolution_candidates = [

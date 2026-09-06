@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Query
 from typing import List, Optional
 from app.schemas.network import NetworkGraphResponse, ShortestPathResponse, NetworkNode, NetworkEdge
-from app.graph.mock_driver import MockInMemoryGraphDriver
+from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/network", tags=["Network Analysis"])
-graph_driver = MockInMemoryGraphDriver()
+
 
 @router.get("", response_model=NetworkGraphResponse)
 def get_network_graph(

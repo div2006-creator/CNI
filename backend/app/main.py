@@ -18,7 +18,9 @@ from app.api import (
     alerts,
     reports,
     audit,
-    data_sources
+    data_sources,
+    analytics,
+    predictive
 )
 
 app = FastAPI(
@@ -74,6 +76,10 @@ app.include_router(alerts.router, prefix=settings.API_PREFIX)
 app.include_router(reports.router, prefix=settings.API_PREFIX)
 app.include_router(audit.router, prefix=settings.API_PREFIX)
 app.include_router(data_sources.router, prefix=settings.API_PREFIX)
+app.include_router(analytics.router, prefix=settings.API_PREFIX)
+app.include_router(predictive.router, prefix=settings.API_PREFIX)
+
+
 
 @app.get("/")
 def root():

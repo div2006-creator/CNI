@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Query
 from typing import Optional, List
 from app.schemas.network import NetworkGraphResponse, NetworkNode, NetworkEdge
-from app.graph.mock_driver import MockInMemoryGraphDriver
+from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/timeline", tags=["Temporal Graph Analysis"])
-graph_driver = MockInMemoryGraphDriver()
+
 
 @router.get("", response_model=NetworkGraphResponse)
 def get_temporal_graph(

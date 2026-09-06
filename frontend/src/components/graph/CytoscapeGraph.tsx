@@ -63,36 +63,36 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
           selector: 'node',
           style: {
             'label': 'data(label)',
-            'color': '#cbd5e1',
+            'color': '#1e293b',
             'font-size': '11px',
             'font-family': 'Inter, sans-serif',
             'text-valign': 'bottom',
             'text-margin-y': 6,
-            'background-color': '#00f0ff',
+            'background-color': '#ea580c',
             'width': '36px',
             'height': '36px',
             'border-width': 2,
-            'border-color': '#1e2d4d',
+            'border-color': '#e2dacd',
             'transition-property': 'background-color, border-color, width, height',
             'transition-duration': 0.2
           }
         },
         // Entity Type Colors
-        { selector: 'node[type = "PERSON"]', style: { 'background-color': '#00f0ff' } },
-        { selector: 'node[type = "ORGANIZATION"]', style: { 'background-color': '#a855f7' } },
-        { selector: 'node[type = "LOCATION"]', style: { 'background-color': '#10b981' } },
-        { selector: 'node[type = "ACCOUNT"]', style: { 'background-color': '#f59e0b' } },
-        { selector: 'node[type = "PHONE"]', style: { 'background-color': '#6366f1' } },
-        { selector: 'node[type = "VEHICLE"]', style: { 'background-color': '#38bdf8' } },
-        { selector: 'node[type = "EVENT"]', style: { 'background-color': '#f43f5e' } },
-        { selector: 'node[type = "CASE"]', style: { 'background-color': '#14b8a6' } },
-        { selector: 'node[type = "DOCUMENT"]', style: { 'background-color': '#06b6d4' } },
+        { selector: 'node[type = "PERSON"]', style: { 'background-color': '#ea580c' } },
+        { selector: 'node[type = "ORGANIZATION"]', style: { 'background-color': '#7c3aed' } },
+        { selector: 'node[type = "LOCATION"]', style: { 'background-color': '#059669' } },
+        { selector: 'node[type = "ACCOUNT"]', style: { 'background-color': '#d97706' } },
+        { selector: 'node[type = "PHONE"]', style: { 'background-color': '#4f46e5' } },
+        { selector: 'node[type = "VEHICLE"]', style: { 'background-color': '#0284c7' } },
+        { selector: 'node[type = "EVENT"]', style: { 'background-color': '#e11d48' } },
+        { selector: 'node[type = "CASE"]', style: { 'background-color': '#0d9488' } },
+        { selector: 'node[type = "DOCUMENT"]', style: { 'background-color': '#0891b2' } },
 
         // Highlight bridge nodes
         {
           selector: 'node[?is_bridge_node]',
           style: {
-            'border-color': '#fbbf24',
+            'border-color': '#d97706',
             'border-width': 4
           }
         },
@@ -101,15 +101,15 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
         {
           selector: 'node[risk_level = "CRITICAL"]',
           style: {
-            'border-color': '#f43f5e',
-            'border-width': 3
+            'border-color': '#e11d48',
+            'border-width': 4
           }
         },
         // Selected Node
         {
           selector: 'node:selected',
           style: {
-            'border-color': '#ffffff',
+            'border-color': '#1c1917',
             'border-width': 4,
             'width': '44px',
             'height': '44px'
@@ -119,21 +119,21 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
           selector: 'edge',
           style: {
             'width': 2,
-            'line-color': '#334155',
-            'target-arrow-color': '#334155',
+            'line-color': '#94a3b8',
+            'target-arrow-color': '#94a3b8',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             'label': 'data(type)',
             'font-size': '9px',
             'font-family': 'JetBrains Mono, monospace',
-            'color': '#64748b',
+            'color': '#475569',
             'text-rotation': 'autorotate',
             'text-margin-y': -8
           }
         },
-        { selector: 'edge[type = "TRANSFERRED_TO"]', style: { 'line-color': '#f59e0b', 'target-arrow-color': '#f59e0b' } },
-        { selector: 'edge[type = "CALLS"]', style: { 'line-color': '#6366f1', 'target-arrow-color': '#6366f1' } },
-        { selector: 'edge[type = "OWNS"]', style: { 'line-color': '#a855f7', 'target-arrow-color': '#a855f7' } }
+        { selector: 'edge[type = "TRANSFERRED_TO"]', style: { 'line-color': '#d97706', 'target-arrow-color': '#d97706' } },
+        { selector: 'edge[type = "CALLS"]', style: { 'line-color': '#4f46e5', 'target-arrow-color': '#4f46e5' } },
+        { selector: 'edge[type = "OWNS"]', style: { 'line-color': '#7c3aed', 'target-arrow-color': '#7c3aed' } }
       ],
       layout: {
         name: layoutName,
@@ -178,18 +178,18 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
   const handleFit = () => cyRef.current && cyRef.current.fit(undefined, 40);
 
   return (
-    <div className="relative w-full rounded-xl bg-dark-950 border border-slate-800 overflow-hidden">
+    <div className="relative w-full rounded-2xl bg-[#fcfcf9] border border-[#e5dfd3] overflow-hidden shadow-xs">
       {/* Top Toolbar */}
       <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between pointer-events-none">
         {/* Layout selector */}
-        <div className="pointer-events-auto flex items-center gap-1 bg-dark-900/90 border border-slate-800 rounded-lg p-1 backdrop-blur-md shadow-md">
-          <span className="text-xs text-slate-400 font-mono px-2">Layout:</span>
+        <div className="pointer-events-auto flex items-center gap-1 bg-white/95 border border-[#e0d8c8] rounded-xl p-1 backdrop-blur-md shadow-sm">
+          <span className="text-xs text-slate-500 font-mono font-bold px-2">Layout:</span>
           {(['cose', 'concentric', 'circle', 'grid'] as const).map(l => (
             <button
               key={l}
               onClick={() => setLayoutName(l)}
-              className={`px-2.5 py-1 text-xs font-mono rounded capitalize transition-all ${
-                layoutName === l ? 'bg-intel-cyan/20 text-intel-cyan font-semibold border border-intel-cyan/40' : 'text-slate-400 hover:text-slate-200'
+              className={`px-2.5 py-1 text-xs font-mono rounded-lg capitalize transition-all ${
+                layoutName === l ? 'bg-saffron-600/15 text-saffron-700 font-bold border border-saffron-600/40' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               {l}
@@ -198,34 +198,34 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
         </div>
 
         {/* Controls */}
-        <div className="pointer-events-auto flex items-center gap-1 bg-dark-900/90 border border-slate-800 rounded-lg p-1 backdrop-blur-md shadow-md">
-          <button onClick={handleZoomIn} title="Zoom In" className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded transition-colors">
-            <ZoomIn className="w-4 h-4" />
+        <div className="pointer-events-auto flex items-center gap-1 bg-white/95 border border-[#e0d8c8] rounded-xl p-1 backdrop-blur-md shadow-sm">
+          <button onClick={handleZoomIn} title="Zoom In" className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-[#f5f0e6] rounded-lg transition-colors">
+            <ZoomIn className="w-4 h-4 text-saffron-600" />
           </button>
-          <button onClick={handleZoomOut} title="Zoom Out" className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded transition-colors">
-            <ZoomOut className="w-4 h-4" />
+          <button onClick={handleZoomOut} title="Zoom Out" className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-[#f5f0e6] rounded-lg transition-colors">
+            <ZoomOut className="w-4 h-4 text-saffron-600" />
           </button>
-          <button onClick={handleFit} title="Fit to Screen" className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded transition-colors">
-            <Maximize2 className="w-4 h-4" />
+          <button onClick={handleFit} title="Fit to Screen" className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-[#f5f0e6] rounded-lg transition-colors">
+            <Maximize2 className="w-4 h-4 text-saffron-600" />
           </button>
         </div>
       </div>
 
       {/* Graph Render Container */}
-      <div ref={containerRef} style={{ height }} className="w-full bg-dark-950" />
+      <div ref={containerRef} style={{ height }} className="w-full bg-[#fcfcf9]" />
 
       {/* Legend Footer */}
-      <div className="px-4 py-2 bg-dark-900 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
+      <div className="px-4 py-2 bg-[#f8f6f0] border-t border-[#e5dfd3] flex flex-wrap items-center justify-between text-xs text-slate-700 gap-2 font-sans">
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="font-mono text-slate-500">Legend:</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> Person</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span> Org</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> Account</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-400 inline-block"></span> Phone</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> Location</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span> Event</span>
+          <span className="font-mono text-slate-500 font-bold">Legend:</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-saffron-600 inline-block"></span> Person</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span> Org</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></span> Account</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-600 inline-block"></span> Phone</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Location</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> Event</span>
         </div>
-        <span className="font-mono text-slate-500">{graphData.total_nodes} nodes | {graphData.total_edges} connections</span>
+        <span className="font-mono text-slate-500 font-bold">{graphData.total_nodes} nodes | {graphData.total_edges} connections</span>
       </div>
     </div>
   );

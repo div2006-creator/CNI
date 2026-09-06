@@ -1,7 +1,9 @@
-from fastapi import APIRouter
-from typing import List, Dict, Any
+from fastapi import APIRouter, HTTPException
+from typing import Dict, Any
+from app.reports.dossier_engine import DossierEngine
 
-router = APIRouter(prefix="/reports", tags=["Reports"])
+router = APIRouter(prefix="/reports", tags=["Reports & Dossiers"])
+
 
 @router.get("/summary")
 def get_report_summary():
@@ -17,3 +19,32 @@ def get_report_summary():
             "Bridge entity Subject Bravo connects primary orchestrator to field logistics group"
         ]
     }
+
+
+@router.get("/dossier/{case_id}")
+def get_case_dossier(case_id: str):
+    """
+    Generate complete auditable evidence dossier for a case, complete with SHA-256 tamper-evident integrity fingerprint.
+    """
+    return DossierEngine.generate_dossier(case_id=case_id)
+
+
+@router.post("/generate-hash")
+def generate_hash(payload: Dict[str, Any]):
+    """
+    Compute deterministic SHA-256 tamper-evident fingerprint for arbitrary dossier or report payload.
+    """
+    raw_hash = DossierEngine.compute_dossier_hash(payload)
+    return {
+        "integrity_fingerprint": f"sha256:{raw_hash}",
+        "computed_hash": raw_hash,
+        "hash_algorithm": "SHA-256"
+    }
+
+
+@router.post("/verify-hash")
+def verify_hash(payload: Dict[str, Any]):
+    """
+    Verify tamper-evident integrity of a dossier payload against its embedded fingerprint.
+    """
+    return DossierEngine.verify_dossier(payload)

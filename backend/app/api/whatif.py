@@ -1,10 +1,10 @@
 import uuid
 from fastapi import APIRouter
 from app.schemas.whatif import WhatIfSimRequest, WhatIfSimResult, NetworkImpactMetrics
-from app.graph.mock_driver import MockInMemoryGraphDriver
+from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/whatif", tags=["What-If Network Analysis"])
-graph_driver = MockInMemoryGraphDriver()
+
 
 @router.post("/simulate", response_model=WhatIfSimResult)
 def simulate_network_impact(req: WhatIfSimRequest):

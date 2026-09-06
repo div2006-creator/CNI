@@ -31,3 +31,14 @@ class AbstractGraphDriver(ABC):
     def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
         """Add a new relationship edge to the graph."""
         pass
+
+    @abstractmethod
+    def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Upsert (insert or merge) an entity node with deduplication and metadata merging."""
+        pass
+
+    @abstractmethod
+    def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Upsert (insert or merge) a relationship edge with deduplication and metadata merging."""
+        pass
+

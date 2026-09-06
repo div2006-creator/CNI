@@ -12,7 +12,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ height = '100%' }) =
   const { graphData, selectedEntityId, selectEntity, filterState } = useInvestigation();
   const [layoutName, setLayoutName] = useState<'cose' | 'concentric' | 'circle' | 'grid'>('cose');
 
-  if (!graphData) return <div className="h-full bg-dark-950 flex items-center justify-center text-slate-500">Loading graph canvas...</div>;
+  if (!graphData) return <div className="h-full bg-[#f8f6f0] flex items-center justify-center text-stone-500 font-mono text-xs">Loading graph canvas...</div>;
 
   // Apply context filters
   const filteredNodes = graphData.nodes.filter(n => {
@@ -36,9 +36,9 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ height = '100%' }) =
   };
 
   return (
-    <div className="h-full bg-dark-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col min-h-0 relative">
+    <div className="h-full bg-[#fcfcf9] border border-[#e5dfd3] rounded-xl overflow-hidden flex flex-col min-h-0 relative shadow-sm">
       {/* Top Toolbar */}
-      <div className="p-2 bg-dark-950 border-b border-slate-800">
+      <div className="p-2 bg-[#f8f6f0] border-b border-[#e5dfd3]">
         <NetworkToolbar
           layoutName={layoutName}
           setLayoutName={setLayoutName}
@@ -50,7 +50,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ height = '100%' }) =
       </div>
 
       {/* Cytoscape Canvas */}
-      <div className="flex-1 relative bg-dark-950">
+      <div className="flex-1 relative bg-[#fcfcf9]">
         <CytoscapeGraph
           graphData={activeGraph}
           onNodeSelect={(n) => selectEntity(n ? n.id : null)}

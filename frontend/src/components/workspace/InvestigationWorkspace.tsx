@@ -25,19 +25,19 @@ export const InvestigationWorkspace: React.FC<InvestigationWorkspaceProps> = ({
   return (
     <div className="space-y-4 h-[calc(100vh-90px)] flex flex-col font-sans">
       {/* Workspace Bar */}
-      <div className="bg-dark-900 border border-slate-800 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="bg-[#fcfcf9] border border-[#e5dfd3] rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-sm">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-xs font-bold text-intel-cyan bg-intel-cyan/10 px-2.5 py-1 rounded border border-intel-cyan/30">
+          <span className="font-mono text-xs font-bold text-saffron-700 bg-saffron-50 px-2.5 py-1 rounded border border-saffron-200">
             {caseNumber}
           </span>
-          <h2 className="text-sm font-bold text-slate-100">{caseTitle} — Coordinated Investigation Workspace</h2>
+          <h2 className="text-sm font-bold text-stone-900">{caseTitle} — Coordinated Investigation Workspace</h2>
         </div>
 
         <div className="flex items-center gap-2">
           {selectedEntity && (
             <button
               onClick={() => setShowProfileDrawer(true)}
-              className="px-3 py-1.5 bg-dark-850 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-slate-200 rounded-lg transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-[#f8f6f0] hover:bg-[#f0ebd9] border border-[#e5dfd3] text-xs font-mono text-stone-800 rounded-lg transition-all flex items-center gap-1.5"
             >
               Entity Centrality Metrics
             </button>
@@ -47,8 +47,8 @@ export const InvestigationWorkspace: React.FC<InvestigationWorkspaceProps> = ({
             onClick={() => setShowPathFinder(!showPathFinder)}
             className={`px-3 py-1.5 text-xs font-mono font-semibold rounded-lg transition-all border flex items-center gap-1.5 ${
               showPathFinder
-                ? 'bg-intel-cyan text-dark-950 border-intel-cyan'
-                : 'bg-dark-950 border-slate-800 text-intel-cyan hover:bg-intel-cyan/10'
+                ? 'bg-saffron-500 text-white border-saffron-600'
+                : 'bg-[#f8f6f0] border-[#e5dfd3] text-saffron-700 hover:bg-saffron-50'
             }`}
           >
             <Waypoints className="w-3.5 h-3.5" /> Hidden Path Finder

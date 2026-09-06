@@ -20,29 +20,29 @@ export const EntityExplorer: React.FC = () => {
   });
 
   return (
-    <div className="h-full bg-dark-900 border border-slate-800 rounded-xl p-3 flex flex-col min-h-0 font-sans text-xs">
+    <div className="h-full bg-[#fcfcf9] border border-[#e5dfd3] rounded-xl p-3 flex flex-col min-h-0 font-sans text-xs">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-2.5">
+      <div className="flex items-center justify-between border-b border-[#e5dfd3] pb-2.5 mb-2.5">
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-intel-cyan" />
-          <h3 className="font-mono font-bold text-slate-100 uppercase text-xs">
+          <Users className="w-4 h-4 text-saffron-600" />
+          <h3 className="font-mono font-bold text-stone-900 uppercase text-xs">
             Entity Explorer
           </h3>
         </div>
-        <span className="font-mono text-[10px] text-intel-cyan bg-intel-cyan/10 px-2 py-0.5 rounded border border-intel-cyan/30">
+        <span className="font-mono text-[10px] text-saffron-700 bg-saffron-50 px-2 py-0.5 rounded border border-saffron-200 font-semibold">
           {filtered.length} / {entities.length}
         </span>
       </div>
 
       {/* Search Input */}
       <div className="relative mb-2.5">
-        <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+        <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           placeholder="Search entity, alias, or ID..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-dark-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-slate-200 focus:border-intel-cyan/50"
+          className="w-full bg-white border border-[#e5dfd3] rounded-lg pl-8 pr-3 py-1.5 text-xs font-mono text-stone-900 focus:border-saffron-400 focus:ring-1 focus:ring-saffron-400/30 outline-none"
         />
       </div>
 
@@ -54,8 +54,8 @@ export const EntityExplorer: React.FC = () => {
             onClick={() => setActiveType(t)}
             className={`px-2 py-0.5 text-[10px] font-mono rounded shrink-0 border transition-all ${
               activeType === t
-                ? 'bg-intel-cyan/20 border-intel-cyan text-intel-cyan font-bold'
-                : 'bg-dark-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-saffron-500 text-white border-saffron-600 font-bold'
+                : 'bg-white border-[#e5dfd3] text-stone-600 hover:text-stone-900 hover:bg-stone-50'
             }`}
           >
             {t}
@@ -73,17 +73,17 @@ export const EntityExplorer: React.FC = () => {
               onClick={() => selectEntity(e.id)}
               className={`p-2.5 rounded-lg border text-xs cursor-pointer transition-all ${
                 isSelected
-                  ? 'bg-dark-850 border-intel-cyan text-slate-100 font-medium shadow-md shadow-cyan-950/20'
-                  : 'bg-dark-950 border-slate-800/80 hover:border-slate-700 text-slate-300'
+                  ? 'bg-saffron-50 border-saffron-400 text-stone-900 font-medium shadow-sm'
+                  : 'bg-white border-[#e5dfd3] hover:border-saffron-300 text-stone-700 hover:bg-amber-50/30'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-100 truncate max-w-[130px]">{e.name}</span>
+                <span className="font-semibold text-stone-900 truncate max-w-[130px]">{e.name}</span>
                 <Badge label={e.type} variant="entity" typeValue={e.type} size="sm" />
               </div>
-              <div className="flex items-center justify-between mt-1.5 text-[10px] font-mono text-slate-500">
+              <div className="flex items-center justify-between mt-1.5 text-[10px] font-mono text-stone-500">
                 <span>{e.connection_count || 0} links</span>
-                <span className="text-intel-cyan">Risk: {(e.risk_score * 100).toFixed(0)}%</span>
+                <span className="text-saffron-700 font-semibold">Risk: {(e.risk_score * 100).toFixed(0)}%</span>
               </div>
             </div>
           );

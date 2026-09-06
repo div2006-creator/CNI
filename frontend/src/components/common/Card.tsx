@@ -20,10 +20,10 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div className={`intel-card ${hoverEffect ? 'intel-card-hover' : ''} ${className}`}>
       {(title || action) && (
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5dfd3]">
           <div>
-            {title && <h3 className="text-base font-bold text-slate-100 tracking-tight">{title}</h3>}
-            {subtitle && <p className="text-xs text-slate-400 mt-1 leading-relaxed">{subtitle}</p>}
+            {title && <h3 className="text-base font-bold text-[#1c1917] tracking-tight">{title}</h3>}
+            {subtitle && <p className="text-xs text-slate-600 mt-1 leading-relaxed">{subtitle}</p>}
           </div>
           {action && <div>{action}</div>}
         </div>

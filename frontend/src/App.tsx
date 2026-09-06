@@ -18,6 +18,10 @@ import { DataSourcesPage } from './pages/DataSourcesPage';
 import { AuditPage } from './pages/AuditPage';
 import { SettingsPage } from './pages/SettingsPage';
 
+import { FinancialIntelligencePage } from './pages/FinancialIntelligencePage';
+import { PredictiveNexusPage } from './pages/PredictiveNexusPage';
+import { SpatialIntelligencePage } from './pages/SpatialIntelligencePage';
+
 export const App: React.FC = () => {
   return (
     <InvestigationProvider>
@@ -29,6 +33,9 @@ export const App: React.FC = () => {
             <Route path="/investigations" element={<InvestigationPage />} />
             <Route path="/investigations/:id" element={<CaseDetailPage />} />
             <Route path="/network" element={<NetworkPage />} />
+            <Route path="/spatial" element={<SpatialIntelligencePage />} />
+            <Route path="/financial" element={<FinancialIntelligencePage />} />
+            <Route path="/predictive" element={<PredictiveNexusPage />} />
             <Route path="/entities" element={<EntitiesPage />} />
             <Route path="/timeline" element={<TimelinePage />} />
             <Route path="/alerts" element={<AlertsPage />} />
@@ -45,5 +52,7 @@ export const App: React.FC = () => {
     </InvestigationProvider>
   );
 };
+
+
 
 export default App;
