@@ -23,12 +23,12 @@ export default {
           700: '#c2410c',
         },
         dark: {
-          950: '#070b14',
-          900: '#0b1120',
-          850: '#10182b',
-          800: '#152037',
-          700: '#1e2d4d',
-          600: '#2c3e66',
+          950: '#f7f9fc',
+          900: '#ffffff',
+          850: '#f0f3f7',
+          800: '#e7ebf1',
+          700: '#d4dbe5',
+          600: '#aab6c5',
         },
         intel: {
           cyan: '#0284c7',
@@ -41,8 +41,8 @@ export default {
         }
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
+        sans: ['IBM Plex Sans', 'Aptos', 'sans-serif'],
       }
     },
   },

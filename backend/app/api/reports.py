@@ -9,7 +9,7 @@ router = APIRouter(prefix="/reports", tags=["Reports & Dossiers"])
 def get_report_summary():
     """Retrieve report generation template metadata."""
     return {
-        "report_id": "NEXUS-INTEL-REPORT-001",
+        "report_id": "CNI-INTEL-REPORT-001",
         "title": "Operation NorthStar Executive Intelligence Briefing",
         "case_number": "INV-2026-0891",
         "classification": "RESTRICTED // LAW ENFORCEMENT INVESTIGATION SUPPORT",

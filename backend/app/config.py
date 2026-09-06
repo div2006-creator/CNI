@@ -4,7 +4,7 @@ from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    APP_NAME: str = "AI Criminal Network Intelligence System"
+    APP_NAME: str = "CNI Intelligence Platform"
     APP_ENV: str = "development"
     DEBUG: bool = True
     API_PREFIX: str = "/api"

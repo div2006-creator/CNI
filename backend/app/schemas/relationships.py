@@ -32,7 +32,7 @@ class RelationshipBase(BaseModel):
 
     # Evidence & Provenance Metadata
     source_type: Optional[str] = Field(None, description="Source provenance (e.g. CDR, BANK_WIRE, SURVEILLANCE)")
-    source_id: Optional[str] = Field(None, description="Raw source log/file identifier")
+    source_reference_id: Optional[str] = Field(None, description="Raw source log or file identifier")
     evidence_id: Optional[str] = Field(None, description="Reference ID to linked evidence record")
     extraction_method: Optional[str] = Field("AUTOMATED_NLP", description="Method of extraction")
 

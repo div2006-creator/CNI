@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   Activity,
   ArrowRight,
+  Plus,
   Clock,
   Eye,
   TrendingUp,
@@ -37,6 +38,7 @@ export const DashboardPage: React.FC = () => {
   const [investigations, setInvestigations] = useState<Investigation[]>([]);
   const [evidenceList, setEvidenceList] = useState<EvidenceItem[]>([]);
   const [graphData, setGraphData] = useState<NetworkGraphData | null>(null);
+  const [showAddRecord, setShowAddRecord] = useState(false);
 
   useEffect(() => {
     async function loadDashboard() {

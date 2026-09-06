@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Bell, Shield, Database, Cpu } from 'lucide-react';
-import { SystemHealth } from '../../types';
+import { Link } from 'react-router-dom';
+import { Alert, SystemHealth } from '../../types';
+import { apiService } from '../../services/api';
 
 interface HeaderProps {
   healthStatus?: SystemHealth | null;
@@ -13,6 +15,13 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   setSearchQuery
 }) => {
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    apiService.getAlerts().then(setAlerts).catch(console.error);
+  }, []);
+
   return (
     <header className="h-16 bg-[#fcfcf9]/90 border-b border-[#e5dfd3] px-6 flex items-center justify-between sticky top-0 z-30 backdrop-blur-md font-sans">
       {/* Search Input */}

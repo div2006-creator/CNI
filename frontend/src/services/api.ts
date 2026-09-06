@@ -26,7 +26,8 @@ import {
   MOCK_AUDITS
 } from '../mock/mockData';
 
-const API_BASE = '/api';
+const configuredApiUrl = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+const API_BASE = configuredApiUrl ? `${configuredApiUrl}/api` : '/api';
 
 async function fetchWithFallback<T>(url: string, fallbackData: T, options?: RequestInit): Promise<T> {
   try {
@@ -40,10 +41,27 @@ async function fetchWithFallback<T>(url: string, fallbackData: T, options?: Requ
 }
 
 export const apiService = {
+  createEntity: async (entity: Omit<Entity, 'id' | 'created_at' | 'updated_at' | 'connection_count' | 'is_bridge_node' | 'betweenness_centrality'>): Promise<Entity> => {
+    const fallback: Entity = {
+      ...entity,
+      id: `entity-local-${Date.now()}`,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      connection_count: 0,
+      is_bridge_node: false,
+      betweenness_centrality: 0
+    };
+    return fetchWithFallback<Entity>(`${API_BASE}/entities`, fallback, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entity)
+    });
+  },
+
   getHealth: async (): Promise<SystemHealth> => {
     return fetchWithFallback<SystemHealth>(`${API_BASE}/health`, {
       status: 'HEALTHY (MOCK MODE)',
-      app_name: 'Explainable Temporal Criminal Network Intelligence Platform',
+      app_name: 'CNI Intelligence Platform',
       environment: 'development',
       timestamp: new Date().toISOString(),
       graph_driver: 'MockInMemoryGraphDriver',

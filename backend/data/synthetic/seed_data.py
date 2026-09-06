@@ -209,7 +209,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "SURVEILLANCE_REPORT",
-            "source_id": "SURV-2026-004",
+            "source_reference_id": "SURV-2026-004",
             "evidence_id": "ev-001",
             "attributes": {"relationship_age": "3 years"}
         },
@@ -224,7 +224,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CORPORATE_FILING",
-            "source_id": "REG-SYN-882",
+            "source_reference_id": "REG-SYN-882",
             "evidence_id": "ev-002",
             "attributes": {"beneficial_ownership": "100%"}
         },
@@ -239,7 +239,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CORPORATE_FILING",
-            "source_id": "REG-SYN-882",
+            "source_reference_id": "REG-SYN-882",
             "evidence_id": "ev-002",
             "attributes": {"title": "Chief Financial Admin"}
         },
@@ -254,7 +254,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "BANK_WIRE",
-            "source_id": "BANK-SYN-994",
+            "source_reference_id": "BANK-SYN-994",
             "evidence_id": "ev-003",
             "attributes": {}
         },
@@ -269,7 +269,7 @@ def get_synthetic_dataset():
             "end_time": t_minus_10d,
             "timestamp": t_minus_10d,
             "source_type": "BANK_WIRE",
-            "source_id": "BANK-SYN-994",
+            "source_reference_id": "BANK-SYN-994",
             "evidence_id": "ev-003",
             "attributes": {"amount": "$500,000"}
         },
@@ -284,7 +284,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CDR",
-            "source_id": "CDR-VOIP-019",
+            "source_reference_id": "CDR-VOIP-019",
             "evidence_id": "ev-004",
             "attributes": {}
         },
@@ -299,7 +299,7 @@ def get_synthetic_dataset():
             "end_time": now,
             "timestamp": t_minus_10d,
             "source_type": "CDR",
-            "source_id": "CDR-VOIP-019",
+            "source_reference_id": "CDR-VOIP-019",
             "evidence_id": "ev-004",
             "attributes": {"call_count_30d": 47}
         },
@@ -314,7 +314,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CDR",
-            "source_id": "CDR-VOIP-019",
+            "source_reference_id": "CDR-VOIP-019",
             "evidence_id": "ev-004",
             "attributes": {}
         },
@@ -329,7 +329,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CORPORATE_FILING",
-            "source_id": "REG-APEX-01",
+            "source_reference_id": "REG-APEX-01",
             "evidence_id": "ev-002",
             "attributes": {}
         },
@@ -344,7 +344,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_10d,
             "source_type": "SURVEILLANCE_REPORT",
-            "source_id": "SURV-2026-004",
+            "source_reference_id": "SURV-2026-004",
             "evidence_id": "ev-001",
             "attributes": {}
         },
@@ -359,7 +359,7 @@ def get_synthetic_dataset():
             "end_time": now,
             "timestamp": t_minus_10d,
             "source_type": "SURVEILLANCE_REPORT",
-            "source_id": "SURV-2026-004",
+            "source_reference_id": "SURV-2026-004",
             "evidence_id": "ev-001",
             "attributes": {"frequency": "Weekly"}
         },
@@ -374,7 +374,7 @@ def get_synthetic_dataset():
             "end_time": now,
             "timestamp": t_minus_10d,
             "source_type": "SURVEILLANCE_REPORT",
-            "source_id": "SURV-2026-004",
+            "source_reference_id": "SURV-2026-004",
             "evidence_id": "ev-001",
             "attributes": {"co_location_events": 5}
         },
@@ -389,7 +389,7 @@ def get_synthetic_dataset():
             "end_time": None,
             "timestamp": t_minus_30d,
             "source_type": "CORPORATE_FILING",
-            "source_id": "REG-SYN-882",
+            "source_reference_id": "REG-SYN-882",
             "evidence_id": "ev-002",
             "attributes": {}
         },
@@ -421,7 +421,7 @@ def get_synthetic_dataset():
             "id": "ev-001",
             "title": "Surveillance Field Intelligence Report SURV-2026-004",
             "source_type": "SURVEILLANCE_REPORT",
-            "source_id": "SURV-2026-004",
+            "source_reference_id": "SURV-2026-004",
             "content_snippet": "Surveillance team observed Subject Alpha meeting Subject Bravo at Safehouse Delta before Subject Bravo traveled to Warehouse Hub 7 to coordinate logistics with Subject Charlie.",
             "confidence": 0.92,
             "timestamp": t_minus_10d,
@@ -433,7 +433,7 @@ def get_synthetic_dataset():
             "id": "ev-002",
             "title": "Offshore Commercial Corporate Filing REG-SYN-882",
             "source_type": "CORPORATE_FILING",
-            "source_id": "REG-SYN-882",
+            "source_reference_id": "REG-SYN-882",
             "content_snippet": "Corporate registration for Vortex Trading Corp lists Subject Alpha as 100% beneficial owner and Subject Delta as Chief Financial Administrator.",
             "confidence": 0.98,
             "timestamp": t_minus_30d,
@@ -445,7 +445,7 @@ def get_synthetic_dataset():
             "id": "ev-003",
             "title": "Banking Wire Intercept BANK-SYN-994",
             "source_type": "BANK_WIRE",
-            "source_id": "BANK-SYN-994",
+            "source_reference_id": "BANK-SYN-994",
             "content_snippet": "Account #SYN-994021 owned by Vortex Trading Corp executed a $500,000 high-velocity wire transfer to Crypto Wallet 0x7a8F...91C2.",
             "confidence": 0.99,
             "timestamp": t_minus_10d,
@@ -457,7 +457,7 @@ def get_synthetic_dataset():
             "id": "ev-004",
             "title": "Cellular Tower Call Detail Record CDR-VOIP-019",
             "source_type": "CDR",
-            "source_id": "CDR-VOIP-019",
+            "source_reference_id": "CDR-VOIP-019",
             "content_snippet": "47 short-duration encrypted voice calls recorded between Burner #1 (used by Subject Alpha) and Burner #2 (used by Subject Bravo).",
             "confidence": 0.94,
             "timestamp": t_minus_10d,

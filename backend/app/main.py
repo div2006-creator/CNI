@@ -25,7 +25,7 @@ from app.api import (
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Explainable Temporal Criminal Network Intelligence Platform API (SIH 2026)",
+    description="CNI Intelligence Platform API for explainable temporal criminal network analysis.",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"

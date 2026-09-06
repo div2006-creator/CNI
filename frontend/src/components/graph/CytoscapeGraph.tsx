@@ -65,7 +65,7 @@ export const CytoscapeGraph: React.FC<CytoscapeGraphProps> = ({
             'label': 'data(label)',
             'color': '#1e293b',
             'font-size': '11px',
-            'font-family': 'Inter, sans-serif',
+            'font-family': 'IBM Plex Sans, sans-serif',
             'text-valign': 'bottom',
             'text-margin-y': 6,
             'background-color': '#ea580c',
