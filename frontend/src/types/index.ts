@@ -287,16 +287,23 @@ export interface DataSource {
 }
 
 export interface SourceDocument {
+  id: string;
   source_document_id: string;
   case_id: string;
   filename: string;
   source_type: string;
-  ingested_at: string;
-  checksum?: string;
-  status: string;
-  record_count: number;
-  file_size?: number;
+  content_type?: string;
   mime_type?: string;
+  file_size?: number;
+  upload_timestamp: string;
+  ingested_at: string;
+  processing_status: 'UPLOADED' | 'VALIDATING' | 'PARSING' | 'EXTRACTING' | 'NORMALIZING' | 'LINKING' | 'BUILDING_EVIDENCE' | 'CHECKING_CONFLICTS' | 'COMPLETED' | 'FAILED';
+  status: string;
+  processing_error?: string;
+  content_hash?: string;
+  checksum?: string;
+  record_count: number;
+  original_metadata?: Record<string, any>;
 }
 
 export interface CentralityItem {
@@ -422,6 +429,8 @@ export interface IngestionSummary {
   total_records_processed: number;
   entities_created_count: number;
   relationships_created_count: number;
+  conflicts_detected_count?: number;
+  source_document_id?: string;
   new_entities: Entity[];
   new_relationships: Relationship[];
   evidence_id: string;
@@ -429,3 +438,4 @@ export interface IngestionSummary {
   warnings: string[];
   case_id?: string;
 }
+

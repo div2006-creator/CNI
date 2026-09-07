@@ -30,6 +30,8 @@ export const DataIngestionModal: React.FC<DataIngestionModalProps> = ({ isOpen, 
   const [sourceType, setSourceType] = useState<string>('AUTO');
   const [rawText, setRawText] = useState<string>('');
   const [reportTitle, setReportTitle] = useState<string>('FIR Surveillance Field Report');
+  const [caseIdInput, setCaseIdInput] = useState<string>('CASE-2026-001');
+
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -94,18 +96,20 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
     setError(null);
     setLoading(true);
 
+    const targetCaseId = caseIdInput.trim() || 'CASE-2026-001';
+
     try {
       let result: IngestionSummary;
       if (activeTab === 'upload') {
         if (!selectedFile) {
           throw new Error('Please select or drag a valid file to upload.');
         }
-        result = await apiService.uploadIngestionFile(selectedFile, sourceType === 'AUTO' ? undefined : sourceType);
+        result = await apiService.uploadIngestionFile(selectedFile, sourceType === 'AUTO' ? undefined : sourceType, targetCaseId);
       } else {
         if (!rawText.trim()) {
           throw new Error('Please enter text content to ingest.');
         }
-        result = await apiService.ingestRawText(rawText, reportTitle, sourceType === 'AUTO' ? undefined : sourceType);
+        result = await apiService.ingestRawText(rawText, reportTitle, sourceType === 'AUTO' ? undefined : sourceType, targetCaseId);
       }
 
       setSummary(result);
@@ -129,10 +133,10 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-                Live Data Ingestion Engine
-                <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-intel-cyan/20 border border-intel-cyan/40 text-intel-cyan rounded">PART 1</span>
+                Real Case Data Ingestion Pipeline
+                <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-intel-cyan/20 border border-intel-cyan/40 text-intel-cyan rounded">PHASE 3</span>
               </h3>
-              <p className="text-xs text-slate-400">Upload CDR, UPI transfers, or FIR text to expand the graph in real-time.</p>
+              <p className="text-xs text-slate-400">Ingest real CDR, UPI transfers, or FIR text into an isolated case environment.</p>
             </div>
           </div>
           <button 
@@ -146,10 +150,27 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
         {/* Modal Body */}
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           
+          {/* Case Selection Input */}
+          <div className="p-3.5 bg-dark-950 border border-slate-800 rounded-xl space-y-1">
+            <label className="block text-xs font-mono font-bold text-intel-cyan">Investigation Case ID Scoping</label>
+            <div className="flex items-center gap-2">
+              <input 
+                type="text" 
+                value={caseIdInput}
+                onChange={(e) => setCaseIdInput(e.target.value)}
+                className="flex-1 bg-dark-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 font-mono focus:outline-none focus:border-intel-cyan"
+                placeholder="e.g. CASE-2026-001"
+              />
+              <span className="text-[11px] font-mono text-slate-400">
+                {caseIdInput === 'DEMO-CASE-001' ? '(Demo Dataset Mode)' : '(Real Case Scoped)'}
+              </span>
+            </div>
+          </div>
+
           {/* Quick Preset Buttons */}
           <div className="space-y-2">
             <span className="intel-data-label flex items-center gap-1 text-[11px]">
-              <Sparkles className="w-3.5 h-3.5 text-intel-cyan" /> Quick Sample Presets (Click to Test Live Ingestion)
+              <Sparkles className="w-3.5 h-3.5 text-intel-cyan" /> Quick Sample Presets (Click to Test Ingestion Pipeline)
             </span>
             <div className="grid grid-cols-3 gap-2">
               <button 
@@ -275,30 +296,34 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
             <div className="p-4 bg-emerald-950/30 border border-emerald-800/80 rounded-2xl space-y-3 animate-fade-in">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-400 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Ingestion Completed & Graph Updated
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Ingestion Completed & Scoped to {summary.case_id}
                 </span>
-                <span className="text-[11px] font-mono text-slate-400">Evidence ID: {summary.evidence_id}</span>
+                <span className="text-[11px] font-mono text-slate-400">Doc: {summary.source_document_id || 'N/A'}</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 font-mono text-xs">
-                <div className="p-2.5 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
-                  <span className="intel-data-label">Source Feed</span>
-                  <span className="text-slate-100 font-bold block">{summary.source_type}</span>
+              <div className="grid grid-cols-4 gap-2 font-mono text-xs">
+                <div className="p-2 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
+                  <span className="intel-data-label">Feed</span>
+                  <span className="text-slate-100 font-bold block truncate">{summary.source_type}</span>
                 </div>
-                <div className="p-2.5 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
-                  <span className="intel-data-label">Extracted Entities</span>
+                <div className="p-2 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
+                  <span className="intel-data-label">Entities</span>
                   <span className="text-emerald-400 font-bold text-sm block">+{summary.entities_created_count}</span>
                 </div>
-                <div className="p-2.5 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
-                  <span className="intel-data-label">Extracted Edges</span>
+                <div className="p-2 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
+                  <span className="intel-data-label">Edges</span>
                   <span className="text-intel-cyan font-bold text-sm block">+{summary.relationships_created_count}</span>
+                </div>
+                <div className="p-2 bg-dark-950/80 border border-slate-800 rounded-xl space-y-0.5">
+                  <span className="intel-data-label">Conflicts</span>
+                  <span className="text-amber-400 font-bold text-sm block">{summary.conflicts_detected_count || 0}</span>
                 </div>
               </div>
 
               {/* Sample New Entities Pills */}
               {summary.new_entities.length > 0 && (
                 <div className="space-y-1.5 pt-1">
-                  <span className="intel-data-label text-[10px]">Newly Discovered Graph Nodes:</span>
+                  <span className="intel-data-label text-[10px]">Extracted Node Identifiers:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {summary.new_entities.slice(0, 6).map(ent => (
                       <span key={ent.id} className="px-2 py-0.5 bg-dark-950 border border-slate-800 rounded text-[11px] font-mono text-slate-200">
@@ -334,11 +359,11 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
           >
             {loading ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" /> Ingesting & Extracting Graph...
+                <RefreshCw className="w-4 h-4 animate-spin" /> Processing Pipeline...
               </>
             ) : (
               <>
-                Ingest & Update Graph <ArrowRight className="w-4 h-4" />
+                Ingest & Process Pipeline <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
@@ -348,3 +373,4 @@ Calls recorded between Burner #1 (+91 98765 43210) and Burner #2 (+91 98765 4321
     </div>
   );
 };
+

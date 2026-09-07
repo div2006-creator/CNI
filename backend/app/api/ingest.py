@@ -1,9 +1,10 @@
-from typing import Optional
-
+from typing import Optional, List
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from app.ingestion.engine import IngestionEngine
 from app.schemas.ingestion import IngestionSummary, TextInputIngest
+from app.schemas.document import SourceDocument
+from app.evidence.document_store import document_store
 
 router = APIRouter(prefix="/ingest", tags=["Live Data Ingestion Engine"])
 
@@ -32,6 +33,8 @@ async def upload_and_ingest_file(
             case_id=case_id or "DEMO-CASE-001"
         )
         return summary
+    except ValueError as val_err:
+        raise HTTPException(status_code=400, detail=str(val_err))
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Failed to ingest file '{file.filename}': {str(exc)}")
 
@@ -52,5 +55,16 @@ def ingest_raw_text(payload: TextInputIngest):
             case_id=payload.case_id or "DEMO-CASE-001"
         )
         return summary
+    except ValueError as val_err:
+        raise HTTPException(status_code=400, detail=str(val_err))
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Failed to ingest text snippet: {str(exc)}")
+
+
+@router.get("/documents", response_model=List[SourceDocument])
+def list_source_documents(case_id: Optional[str] = None):
+    """
+    Retrieve ingested SourceDocument records scoped by case_id.
+    """
+    return document_store.list_documents(case_id=case_id)
+

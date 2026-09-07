@@ -36,12 +36,15 @@ class IngestionSummary(BaseModel):
     total_records_processed: int
     entities_created_count: int
     relationships_created_count: int
+    conflicts_detected_count: int = 0
+    source_document_id: Optional[str] = None
     new_entities: List[ParsedEntity] = Field(default_factory=list)
     new_relationships: List[ParsedRelationship] = Field(default_factory=list)
     evidence_id: str
     message: str = "Data successfully ingested into intelligence graph."
     warnings: List[str] = Field(default_factory=list)
     case_id: Optional[str] = "DEMO-CASE-001"
+
 
 class TextInputIngest(BaseModel):
     text: str

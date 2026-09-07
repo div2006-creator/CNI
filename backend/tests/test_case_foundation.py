@@ -109,10 +109,10 @@ def test_case_isolation_in_graph_driver():
     assert "person-alpha-1" not in beta_node_ids
     assert "rel-alpha-1" not in beta_edge_ids
 
-def test_cross_case_entity_canonical_identity():
-    # Same phone number appearing in CASE-1 and CASE-2
+def test_cross_case_entity_case_isolation():
+    # Same phone number appearing in CASE-1 and CASE-2 remain case-scoped per Phase 3 requirement 7
     shared_phone_c1 = {
-        "id": "shared-phone-100",
+        "id": "shared-phone-c1-100",
         "name": "+91 9876500000",
         "type": "PHONE",
         "case_id": "CASE-1"
@@ -126,12 +126,11 @@ def test_cross_case_entity_canonical_identity():
     n1 = graph_driver.upsert_node(shared_phone_c1, case_id="CASE-1")
     n2 = graph_driver.upsert_node(shared_phone_c2, case_id="CASE-2")
 
-    # Should reuse same canonical node ID
-    assert n1["id"] == n2["id"]
-    # Should record both cases in case_ids
-    merged_node = graph_driver.nodes[n1["id"]]
-    assert "CASE-1" in merged_node["case_ids"]
-    assert "CASE-2" in merged_node["case_ids"]
+    # In Phase 3, entities from different cases are isolated and do not automatically merge
+    assert n1["id"] != n2["id"]
+    assert n1["case_id"] == "CASE-1"
+    assert n2["case_id"] == "CASE-2"
+
 
 def test_investigator_review_status_persistence():
     cand_data = {

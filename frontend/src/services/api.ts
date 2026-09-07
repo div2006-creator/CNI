@@ -13,8 +13,10 @@ import {
   CopilotResponse,
   AuditLog,
   IngestionSummary,
-  RelationshipEvidenceExplanation
+  RelationshipEvidenceExplanation,
+  SourceDocument
 } from '../types';
+
 
 import { 
   MOCK_ENTITIES, 
@@ -249,10 +251,11 @@ export const apiService = {
     return fetchWithFallback<DataSource[]>(`${API_BASE}/data-sources`, MOCK_DATA_SOURCES);
   },
 
-  uploadIngestionFile: async (file: File, sourceType?: string): Promise<IngestionSummary> => {
+  uploadIngestionFile: async (file: File, sourceType?: string, caseId?: string): Promise<IngestionSummary> => {
     const formData = new FormData();
     formData.append('file', file);
     if (sourceType) formData.append('source_type', sourceType);
+    if (caseId) formData.append('case_id', caseId);
 
     const res = await fetch(`${API_BASE}/ingest/upload`, {
       method: 'POST',
@@ -267,11 +270,11 @@ export const apiService = {
     return await res.json();
   },
 
-  ingestRawText: async (text: string, title?: string, sourceType?: string): Promise<IngestionSummary> => {
+  ingestRawText: async (text: string, title?: string, sourceType?: string, caseId?: string): Promise<IngestionSummary> => {
     const res = await fetch(`${API_BASE}/ingest/text`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, title, source_type: sourceType })
+      body: JSON.stringify({ text, title, source_type: sourceType, case_id: caseId })
     });
 
     if (!res.ok) {
@@ -281,6 +284,13 @@ export const apiService = {
 
     return await res.json();
   },
+
+  getSourceDocuments: async (caseId?: string): Promise<SourceDocument[]> => {
+    let url = `${API_BASE}/ingest/documents`;
+    if (caseId) url += `?case_id=${encodeURIComponent(caseId)}`;
+    return fetchWithFallback<SourceDocument[]>(url, []);
+  },
+
 
   getNetworkAnalytics: async (): Promise<any> => {
     const fallback = {

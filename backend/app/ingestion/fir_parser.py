@@ -10,12 +10,28 @@ class FIRParser:
     @classmethod
     def parse(cls, content: str) -> Dict[str, Any]:
         """
-        Parses unstructured text and extracts structured intelligence fields.
+        Parses unstructured text and extracts structured intelligence fields with character offset locations.
+        Raises ValueError if content is empty.
         """
         text = content.strip()
-        
+        if not text:
+            raise ValueError("Empty FIR or surveillance report text content.")
+
+        # Helper to compute character start/end offsets for matched tokens
+        def locate_offsets(tokens_list: List[str]) -> Dict[str, Dict[str, int]]:
+            offsets = {}
+            for tok in tokens_list:
+                pos = text.find(tok)
+                if pos != -1:
+                    offsets[tok] = {
+                        "start_offset": pos,
+                        "end_offset": pos + len(tok)
+                    }
+                else:
+                    offsets[tok] = {"start_offset": 0, "end_offset": len(tok)}
+            return offsets
+
         # 1. Extract Person Names / Suspect Aliases
-        # Matches "Subject <Name>", "accused <Name>", "alias <Alias>", "Mr. <Name>"
         person_patterns = [
             r'Subject\s+([A-Z][a-z0-9_-]+(?:\s+[A-Z][a-z0-9_-]+)?)',
             r'accused\s+([A-Z][a-z0-9_-]+(?:\s+[A-Z][a-z0-9_-]+)?)',
@@ -50,6 +66,8 @@ class FIRParser:
         veh_matches = re.findall(r'\b((?:Black|White|Silver|Red|Blue)?\s*(?:SUV|Sedan|Truck|Van|Bike)\s*(?:\(Plates:\s*[A-Z0-9-]+\)?)?)\b', text, re.IGNORECASE)
         vehicles = list(set([v.strip() for v in veh_matches if len(v.strip()) > 3]))
 
+        all_tokens = list(persons) + phones + accounts + organizations + locations + vehicles
+
         return {
             "record_type": "FIR_REPORT",
             "full_text": text,
@@ -60,5 +78,7 @@ class FIRParser:
                 "organizations": organizations,
                 "locations": locations,
                 "vehicles": vehicles
-            }
+            },
+            "token_offsets": locate_offsets(all_tokens)
         }
+

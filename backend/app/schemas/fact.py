@@ -14,3 +14,6 @@ class EvidenceProvenance(BaseModel):
     start_offset: Optional[int] = Field(None, description="Character start offset in text if applicable")
     end_offset: Optional[int] = Field(None, description="Character end offset in text if applicable")
     row_number: Optional[int] = Field(None, description="CSV row index if applicable")
+    snippet: Optional[str] = Field(None, description="Short source text snippet supporting the observation")
+    is_partial: bool = Field(False, description="Flag indicating if provenance details are partial rather than exact")
+

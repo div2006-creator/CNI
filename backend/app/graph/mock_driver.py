@@ -49,8 +49,9 @@ class MockInMemoryGraphDriver(AbstractGraphDriver):
 
     def _index_node(self, node: Dict[str, Any]):
         key = self._get_node_lookup_key(node)
+        c_id = node.get("case_id", "DEMO-CASE-001")
         if key:
-            self.normalized_index[key] = node["id"]
+            self.normalized_index[f"{c_id}:{key}"] = node["id"]
 
     def _matches_case(self, item_case_id: Optional[str], item_case_ids: Optional[List[str]], target_case_id: Optional[str]) -> bool:
         if not target_case_id:
@@ -222,7 +223,7 @@ class MockInMemoryGraphDriver(AbstractGraphDriver):
         raw_identifier = node_data.get("identifier") or node_data.get("name") or node_data.get("id")
         norm_val = normalize_entity_identifier(node_type, str(raw_identifier)) if raw_identifier else ""
         
-        lookup_key = f"{node_type}:{norm_val}" if norm_val else None
+        lookup_key = f"{effective_case_id}:{node_type}:{norm_val}" if norm_val else None
 
         existing_id = None
         if node_data.get("id") and node_data["id"] in self.nodes:
@@ -296,6 +297,7 @@ class MockInMemoryGraphDriver(AbstractGraphDriver):
             return new_node
 
     def add_edge(self, edge_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:
+
         return self.upsert_edge(edge_data, case_id=case_id)
 
     def upsert_edge(self, edge_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:

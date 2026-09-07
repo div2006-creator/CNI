@@ -19,21 +19,25 @@ class FinancialParser:
     def parse(cls, content: str) -> List[Dict[str, Any]]:
         """
         Parses financial transaction CSV string into standardized list of transfer records.
+        Raises ValueError if content is invalid or unparseable.
         """
-        records: List[Dict[str, Any]] = []
+        raw_text = content.strip()
+        if not raw_text:
+            raise ValueError("Empty financial transaction file content.")
 
-        stream = io.StringIO(content.strip())
-        lines = [line for line in stream.readlines() if line.strip()]
+        records: List[Dict[str, Any]] = []
+        stream = io.StringIO(raw_text)
+        lines = [line.strip() for line in stream.readlines() if line.strip()]
 
         if not lines:
-            return records
+            raise ValueError("No valid text lines found in financial content.")
 
         delimiter = ',' if ',' in lines[0] else ('\t' if '\t' in lines[0] else ';')
         reader = csv.DictReader(lines, delimiter=delimiter)
 
         def find_col(candidates: List[str], row: Dict[str, Any]) -> str:
             for k, v in row.items():
-                if k and k.strip().lower() in candidates:
+                if k and str(k).strip().lower() in candidates:
                     return str(v).strip()
             return ""
 
@@ -61,6 +65,7 @@ class FinancialParser:
                     receiver = accs[1]
 
             if sender and receiver:
+                snippet = f"Row {idx+2}: Sender {sender} -> Receiver {receiver} (Amt: {amount})"
                 records.append({
                     "record_type": "FINANCIAL",
                     "sender_account": sender,
@@ -69,7 +74,10 @@ class FinancialParser:
                     "txn_id": txn_id,
                     "timestamp": timestamp,
                     "channel": channel,
-                    "raw_row": idx + 1
+                    "raw_row": idx + 1,
+                    "row_number": idx + 2,
+                    "line_number": idx + 2,
+                    "snippet": snippet
                 })
 
         # Regex fallback for plain text logs
@@ -86,7 +94,14 @@ class FinancialParser:
                         "txn_id": f"TXN-TEXT-{idx+1}",
                         "timestamp": "2026-08-31T14:30:00Z",
                         "channel": "UPI",
-                        "raw_row": idx + 1
+                        "raw_row": idx + 1,
+                        "row_number": idx + 1,
+                        "line_number": idx + 1,
+                        "snippet": line[:150]
                     })
 
+        if not records:
+            raise ValueError("Invalid Financial format: Content contains no identifiable sender/receiver account handles or transactions.")
+
         return records
+

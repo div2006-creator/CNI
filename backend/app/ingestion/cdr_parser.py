@@ -9,7 +9,8 @@ class CDRParser:
     """
 
     CALLER_COLS = ["calling_number", "caller", "caller_num", "phone_a", "source_phone", "calling_no", "caller_id", "source"]
-    CALLEE_COLS = ["called_number", "callee", "receiver_num", "phone_b", "target_phone", "called_no", "receiver_id", "target"]
+    CALLEE_COLS = ["called_number", "called", "callee", "receiver_num", "phone_b", "target_phone", "called_no", "receiver_id", "target"]
+
     DURATION_COLS = ["duration", "call_duration", "duration_sec", "dur_sec"]
     TIME_COLS = ["timestamp", "call_time", "date_time", "datetime", "date", "time"]
     TYPE_COLS = ["call_type", "type", "communication_type"]
@@ -19,25 +20,25 @@ class CDRParser:
     def parse(cls, content: str) -> List[Dict[str, Any]]:
         """
         Parses CDR raw CSV string into standardized list of call record dictionaries.
+        Raises ValueError if content is invalid or unparseable.
         """
+        raw_text = content.strip()
+        if not raw_text:
+            raise ValueError("Empty CDR file content.")
+
         records: List[Dict[str, Any]] = []
-        
-        # Try CSV reader first
-        stream = io.StringIO(content.strip())
-        lines = [line for line in stream.readlines() if line.strip()]
-        
+        stream = io.StringIO(raw_text)
+        lines = [line.strip() for line in stream.readlines() if line.strip()]
+
         if not lines:
-            return records
+            raise ValueError("No valid text lines found in CDR content.")
 
         delimiter = ',' if ',' in lines[0] else ('\t' if '\t' in lines[0] else ';')
         reader = csv.DictReader(lines, delimiter=delimiter)
-        
-        headers = [h.strip().lower() for h in (reader.fieldnames or [])]
-        
-        # Helper to find column index/key by candidate names
+
         def find_col(candidates: List[str], row: Dict[str, Any]) -> str:
             for k, v in row.items():
-                if k and k.strip().lower() in candidates:
+                if k and str(k).strip().lower() in candidates:
                     return str(v).strip()
             return ""
 
@@ -58,6 +59,7 @@ class CDRParser:
                     callee = phones[1]
 
             if caller and callee:
+                snippet = f"Line {idx+2}: Caller {caller} -> Callee {callee}"
                 records.append({
                     "record_type": "CDR",
                     "caller_phone": caller,
@@ -66,7 +68,10 @@ class CDRParser:
                     "timestamp": timestamp or "2026-08-30T10:00:00Z",
                     "call_type": call_type.upper(),
                     "cell_tower": location or "Tower-Alpha-4",
-                    "raw_row": idx + 1
+                    "raw_row": idx + 1,
+                    "row_number": idx + 2, # Account for CSV header row
+                    "line_number": idx + 2,
+                    "snippet": snippet
                 })
 
         # If CSV parsing produced 0 records, try line-by-line regex extraction
@@ -82,7 +87,14 @@ class CDRParser:
                         "timestamp": "2026-08-30T10:00:00Z",
                         "call_type": "VOICE",
                         "cell_tower": "Tower-Default",
-                        "raw_row": idx + 1
+                        "raw_row": idx + 1,
+                        "row_number": idx + 1,
+                        "line_number": idx + 1,
+                        "snippet": line[:150]
                     })
 
+        if not records:
+            raise ValueError("Invalid CDR format: Content contains no identifiable caller/callee phone numbers.")
+
         return records
+
