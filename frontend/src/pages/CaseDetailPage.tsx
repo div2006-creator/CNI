@@ -8,8 +8,8 @@ export const CaseDetailPage: React.FC = () => {
   return (
     <div>
       <WorkspaceLayout
-        caseTitle={id === 'case-802' ? 'Project Silverline' : 'Operation NorthStar'}
-        caseNumber={id === 'case-802' ? 'INV-2026-0412' : 'INV-2026-0891'}
+        caseTitle={id === 'case-802' ? 'Project Silverline' : 'Active Intelligence Case'}
+        caseNumber={id === 'case-802' ? 'INV-2026-0412' : 'INV-ACTIVE-001'}
       />
     </div>
   );

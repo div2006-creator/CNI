@@ -4,11 +4,13 @@ import { Badge } from '../components/common/Badge';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { apiService } from '../services/api';
 import { DataSource } from '../types';
-import { Database, Plus, RefreshCw, CheckCircle, FileSpreadsheet, Radio, FileText } from 'lucide-react';
+import { Database, Plus, CheckCircle, FileSpreadsheet, Radio, FileText, Upload } from 'lucide-react';
+import { DataIngestionModal } from '../components/ingestion/DataIngestionModal';
 
 export const DataSourcesPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [sources, setSources] = useState<DataSource[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function loadSources() {
@@ -51,8 +53,11 @@ export const DataSourcesPage: React.FC = () => {
             Overview of structured financial logs, call telemetry metadata, and unstructured intelligence feeds.
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 bg-intel-cyan/10 hover:bg-intel-cyan/20 border border-intel-cyan/40 text-intel-cyan text-xs font-mono font-bold rounded-xl transition-all shadow-sm">
-          <Plus className="w-4 h-4" /> Connect Data Feed
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-intel-cyan hover:bg-cyan-400 text-dark-950 font-bold text-xs font-mono rounded-xl transition-all shadow-md"
+        >
+          <Upload className="w-4 h-4" /> Upload & Ingest File
         </button>
       </div>
 
@@ -98,6 +103,13 @@ export const DataSourcesPage: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      {/* Live Ingestion Modal */}
+      <DataIngestionModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
+

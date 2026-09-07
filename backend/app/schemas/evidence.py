@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 class EvidenceBase(BaseModel):
     title: str
     source_type: str = Field(..., description="e.g. CDR, BANK_WIRE, SURVEILLANCE_REPORT, MOBILE_MSG")
-    source_id: str
+    source_id: Optional[str] = None
+    source_reference_id: Optional[str] = None
     content_snippet: str
     confidence: float = Field(0.9, ge=0.0, le=1.0)
     timestamp: str
@@ -17,4 +18,5 @@ class EvidenceCreate(EvidenceBase):
 
 class EvidenceResponse(EvidenceBase):
     id: str
-    created_at: str
+    created_at: Optional[str] = None
+

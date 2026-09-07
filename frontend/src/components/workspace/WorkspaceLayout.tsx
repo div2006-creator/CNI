@@ -22,8 +22,8 @@ interface WorkspaceLayoutProps {
 }
 
 export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
-  caseTitle = 'Operation NorthStar',
-  caseNumber = 'INV-2026-0891'
+  caseTitle = 'Active Case Investigation',
+  caseNumber = 'INV-ACTIVE-001'
 }) => {
   const [graphData, setGraphData] = useState<NetworkGraphData | null>(null);
   const [selectedNode, setSelectedNode] = useState<NetworkNode | null>(null);

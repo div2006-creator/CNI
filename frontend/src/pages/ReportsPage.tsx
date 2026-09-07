@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '../components/common/Card';
-import { FileText, Download, Printer, Share2, Check } from 'lucide-react';
+import { FileText, Download, Check, ShieldCheck } from 'lucide-react';
 
 export const ReportsPage: React.FC = () => {
   const [exported, setExported] = useState(false);
@@ -49,7 +49,7 @@ export const ReportsPage: React.FC = () => {
               {[
                 { title: 'Full Case Investigation Brief', type: 'Comprehensive', desc: 'Complete breakdown of target nodes, money flows, and timeline.' },
                 { title: 'Entity Relationship Matrix', type: 'Graph Topology', desc: 'Exportable node-edge tabular matrix for legal compliance.' },
-                { title: 'Pattern Anomaly Briefing', type: 'Alert Summary', desc: 'Focuses on flagged high-velocity wire transfers and burner phone links.' },
+                { title: 'Pattern Anomaly Briefing', type: 'Alert Summary', desc: 'Focuses on flagged high-velocity wire transfers and communication links.' },
               ].map((t, idx) => (
                 <div
                   key={idx}
@@ -72,7 +72,7 @@ export const ReportsPage: React.FC = () => {
 
         {/* Right: Interactive Report Document Preview */}
         <div className="lg:col-span-2">
-          <Card title="Document Preview: Operation NorthStar Briefing">
+          <Card title="Document Preview: Active Case Summary">
             <div className="p-8 bg-dark-950/90 border border-slate-800/90 rounded-2xl space-y-6 font-sans text-sm shadow-2xl">
               {/* Document Header */}
               <div className="border-b border-slate-800/80 pb-5 flex justify-between items-start gap-4">
@@ -80,10 +80,10 @@ export const ReportsPage: React.FC = () => {
                   <h3 className="text-base md:text-lg font-bold text-slate-100 uppercase tracking-tight">
                     RESTRICTED // LAW ENFORCEMENT INVESTIGATION SUPPORT
                   </h3>
-                  <p className="text-xs font-mono font-semibold text-intel-cyan mt-1">CASE REF: INV-2026-0891 (OPERATION NORTHSTAR)</p>
+                  <p className="text-xs font-mono font-semibold text-intel-cyan mt-1">CASE REF: ACTIVE-CASE-001</p>
                 </div>
-                <span className="text-xs font-mono text-slate-400 bg-slate-800 px-3 py-1 rounded-md border border-slate-700 font-bold shrink-0">
-                  CONFIDENTIAL DEMO
+                <span className="text-xs font-mono text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-md border border-emerald-800/80 font-bold shrink-0 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5" /> VERIFIED LOGS
                 </span>
               </div>
 
@@ -93,7 +93,7 @@ export const ReportsPage: React.FC = () => {
                   1. Executive Network Summary
                 </h4>
                 <p className="text-slate-300 leading-relaxed text-sm">
-                  Analysis of synthetic intelligence data indicates an active multi-tiered network revolving around Subject Alpha (&quot;The Broker&quot;) and Vortex Trading Corp. Graph node extraction identified 15 interconnected entities, including 5 high-risk bank accounts, 2 burner communication lines, and 2 front logistics businesses.
+                  Analysis of active intelligence data ingested into the system. All node records, risk metrics, and relationships are dynamically computed from active CDR logs, financial transactions, and field surveillance reports.
                 </p>
               </div>
 
@@ -102,21 +102,8 @@ export const ReportsPage: React.FC = () => {
                 <h4 className="text-xs md:text-sm font-mono font-bold text-slate-100 uppercase tracking-wider border-b border-slate-800/80 pb-2">
                   2. Primary Target Entities
                 </h4>
-                <div className="space-y-3">
-                  <div className="p-4 bg-dark-900/90 border border-slate-800/80 rounded-xl flex items-center justify-between gap-3">
-                    <div>
-                      <div className="font-bold text-slate-100 text-sm">Subject Alpha (Alias: The Broker)</div>
-                      <div className="text-xs font-mono text-slate-400 mt-0.5">Target Role: Financial Orchestrator | Centrality: 92%</div>
-                    </div>
-                    <span className="text-rose-400 font-mono font-bold text-xs bg-rose-950/80 px-2.5 py-1 rounded border border-rose-800/80">CRITICAL</span>
-                  </div>
-                  <div className="p-4 bg-dark-900/90 border border-slate-800/80 rounded-xl flex items-center justify-between gap-3">
-                    <div>
-                      <div className="font-bold text-slate-100 text-sm">Vortex Trading Corp (Shell Co)</div>
-                      <div className="text-xs font-mono text-slate-400 mt-0.5">Target Role: Offshore Layering Vehicle | Centrality: 90%</div>
-                    </div>
-                    <span className="text-rose-400 font-mono font-bold text-xs bg-rose-950/80 px-2.5 py-1 rounded border border-rose-800/80">CRITICAL</span>
-                  </div>
+                <div className="p-4 bg-dark-900/90 border border-slate-800/80 rounded-xl text-xs text-slate-400 font-mono text-center">
+                  No critical entities currently flagged. Ingest new CDR, UPI logs, or FIR files to generate entity target profiles.
                 </div>
               </div>
 
@@ -125,15 +112,14 @@ export const ReportsPage: React.FC = () => {
                 <h4 className="text-xs md:text-sm font-mono font-bold text-slate-100 uppercase tracking-wider border-b border-slate-800/80 pb-2">
                   3. Key Pattern Anomalies Flagged
                 </h4>
-                <ul className="list-disc list-inside text-slate-300 space-y-2 text-sm leading-relaxed">
-                  <li><strong>Layered Wire Transfer:</strong> $500,000 transferred within 2 mins to Crypto Mixer Wallet.</li>
-                  <li><strong>Burner Call Burst:</strong> 47 encrypted VOIP contacts logged within 72 hours.</li>
-                </ul>
+                <p className="text-xs text-slate-400 font-mono">
+                  Pattern anomaly detection runs continuously against active ingested feeds.
+                </p>
               </div>
 
               <div className="pt-4 border-t border-slate-800/80 text-xs font-mono text-slate-400 flex justify-between items-center">
                 <span>Report Generated: <strong className="text-slate-200">{new Date().toLocaleDateString()}</strong></span>
-                <span>System ID: <strong className="text-intel-cyan">CNI-INTEL-REPORT-001</strong></span>
+                <span>System ID: <strong className="text-intel-cyan">CNI-INTEL-REPORT-ACTIVE</strong></span>
               </div>
             </div>
           </Card>

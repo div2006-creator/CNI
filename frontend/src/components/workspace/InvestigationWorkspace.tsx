@@ -15,8 +15,8 @@ interface InvestigationWorkspaceProps {
 }
 
 export const InvestigationWorkspace: React.FC<InvestigationWorkspaceProps> = ({
-  caseTitle = 'Operation NorthStar',
-  caseNumber = 'INV-2026-0891'
+  caseTitle = 'Active Case Investigation',
+  caseNumber = 'INV-ACTIVE-001'
 }) => {
   const { selectedEntity, selectEntity, relationships, connectionPathResult } = useInvestigation();
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);

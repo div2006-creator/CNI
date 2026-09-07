@@ -28,6 +28,16 @@ class AbstractGraphDriver(ABC):
         pass
 
     @abstractmethod
+    def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add or merge a node using its stable logical identity."""
+        pass
+
+    @abstractmethod
     def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
         """Add a new relationship edge to the graph."""
+        pass
+
+    @abstractmethod
+    def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Add or merge a relationship using its stable logical identity."""
         pass

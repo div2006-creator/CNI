@@ -217,3 +217,18 @@ export interface SystemHealth {
     neo4j: string;
   };
 }
+
+export interface IngestionSummary {
+  status: string;
+  filename: string;
+  source_type: string;
+  total_records_processed: number;
+  entities_created_count: number;
+  relationships_created_count: number;
+  new_entities: Entity[];
+  new_relationships: Relationship[];
+  evidence_id: string;
+  message: string;
+  warnings: string[];
+}
+

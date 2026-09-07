@@ -4,7 +4,7 @@ import { Badge } from '../components/common/Badge';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { apiService } from '../services/api';
 import { Investigation, Entity } from '../types';
-import { Briefcase, UserCheck, Plus, FileText, Tag, Calendar, User } from 'lucide-react';
+import { Briefcase, Plus, Tag, User } from 'lucide-react';
 
 export const InvestigationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -65,34 +65,42 @@ export const InvestigationPage: React.FC = () => {
           <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
             Active Case Boards ({cases.length})
           </h3>
-          {cases.map((c) => (
-            <div
-              key={c.id}
-              onClick={() => setSelectedCase(c)}
-              className={`p-5 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-                selectedCase?.id === c.id
-                  ? 'bg-dark-900 border-intel-cyan shadow-xl ring-1 ring-intel-cyan/30'
-                  : 'bg-dark-900/70 border-slate-800/80 hover:border-slate-700/80 hover:bg-dark-900/90'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-intel-cyan bg-intel-cyan/10 px-2.5 py-1 rounded-md border border-intel-cyan/30">{c.case_number}</span>
-                <Badge label={c.priority} variant="severity" typeValue={c.priority} size="sm" />
+          {cases.length > 0 ? (
+            cases.map((c) => (
+              <div
+                key={c.id}
+                onClick={() => setSelectedCase(c)}
+                className={`p-5 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                  selectedCase?.id === c.id
+                    ? 'bg-dark-900 border-intel-cyan shadow-xl ring-1 ring-intel-cyan/30'
+                    : 'bg-dark-900/70 border-slate-800/80 hover:border-slate-700/80 hover:bg-dark-900/90'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-intel-cyan bg-intel-cyan/10 px-2.5 py-1 rounded-md border border-intel-cyan/30">{c.case_number}</span>
+                  <Badge label={c.priority} variant="severity" typeValue={c.priority} size="sm" />
+                </div>
+                <h4 className="text-base font-bold text-slate-100 leading-snug">{c.title}</h4>
+                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{c.summary}</p>
+                <div className="pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 font-mono">
+                  <span className="flex items-center gap-1.5 font-semibold text-slate-300">
+                    <User className="w-3.5 h-3.5 text-intel-cyan" /> {c.lead_investigator}
+                  </span>
+                  <span className="font-semibold">{c.assigned_entity_ids.length} Entities</span>
+                </div>
               </div>
-              <h4 className="text-base font-bold text-slate-100 leading-snug">{c.title}</h4>
-              <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{c.summary}</p>
-              <div className="pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 font-mono">
-                <span className="flex items-center gap-1.5 font-semibold text-slate-300">
-                  <User className="w-3.5 h-3.5 text-intel-cyan" /> {c.lead_investigator}
-                </span>
-                <span className="font-semibold">{c.assigned_entity_ids.length} Entities</span>
-              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center bg-dark-900/70 border border-slate-800/80 rounded-2xl space-y-2">
+              <Briefcase className="w-8 h-8 mx-auto text-slate-600" />
+              <p className="text-xs font-mono text-slate-400">No active cases opened.</p>
+              <p className="text-[11px] text-slate-500">Click &quot;Open New Case File&quot; to register a case file.</p>
             </div>
-          ))}
+          )}
         </div>
 
         {/* Right: Detailed Case Board (2 Columns) */}
-        {selectedCase && (
+        {selectedCase ? (
           <div className="lg:col-span-2 space-y-6">
             <Card title="Active Case Detail Inspector" subtitle="Full case overview, linked suspects, and chronological lead notes.">
               <div className="space-y-6 font-sans">
@@ -134,49 +142,33 @@ export const InvestigationPage: React.FC = () => {
                     <span>Target Entities Linked ({assignedEntities.length})</span>
                     <button className="text-xs font-mono text-intel-cyan hover:underline font-bold">+ Link Entity</button>
                   </h5>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    {assignedEntities.map((ent) => (
-                      <div key={ent.id} className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl flex items-center justify-between gap-2 shadow-sm">
-                        <div className="space-y-1">
-                          <div className="text-sm font-bold text-slate-100">{ent.name}</div>
-                          <div className="flex items-center gap-2">
-                            <Badge label={ent.type} variant="entity" typeValue={ent.type} size="sm" />
-                            <span className="text-xs font-mono text-slate-400">Risk: <strong className="text-rose-400">{(ent.risk_score * 100).toFixed(0)}%</strong></span>
+                  {assignedEntities.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      {assignedEntities.map((ent) => (
+                        <div key={ent.id} className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl flex items-center justify-between gap-2 shadow-sm">
+                          <div className="space-y-1">
+                            <div className="text-sm font-bold text-slate-100">{ent.name}</div>
+                            <div className="flex items-center gap-2">
+                              <Badge label={ent.type} variant="entity" typeValue={ent.type} size="sm" />
+                              <span className="text-xs font-mono text-slate-400">Risk: <strong className="text-rose-400">{(ent.risk_score * 100).toFixed(0)}%</strong></span>
+                            </div>
                           </div>
+                          <Badge label={ent.risk_level} variant="risk" typeValue={ent.risk_level} size="sm" />
                         </div>
-                        <Badge label={ent.risk_level} variant="risk" typeValue={ent.risk_level} size="sm" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Evidence & Lead Notes Stream */}
-                <div className="space-y-3">
-                  <h5 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                    <span>Investigative Lead Log</span>
-                    <span className="text-xs font-mono text-slate-400">{selectedCase.notes_count} entries recorded</span>
-                  </h5>
-                  <div className="space-y-3">
-                    <div className="p-4 bg-dark-950/90 border border-slate-800/90 rounded-xl text-xs space-y-1.5">
-                      <div className="flex items-center justify-between text-xs font-mono">
-                        <span className="text-intel-cyan font-bold bg-intel-cyan/10 px-2 py-0.5 rounded border border-intel-cyan/30">Lead Note #14 - Financial Intercept</span>
-                        <span className="text-slate-400">Today 14:22 GMT</span>
-                      </div>
-                      <p className="text-slate-200 text-xs md:text-sm leading-relaxed pt-1">
-                        Cross-matched $500k wire transfer with offshore registry SYN-882910. Confirming beneficial owner connection to Subject Alpha.
-                      </p>
+                      ))}
                     </div>
-                    <div className="p-4 bg-dark-950/90 border border-slate-800/90 rounded-xl text-xs space-y-1.5">
-                      <div className="flex items-center justify-between text-xs font-mono">
-                        <span className="text-intel-cyan font-bold bg-intel-cyan/10 px-2 py-0.5 rounded border border-intel-cyan/30">Lead Note #13 - Cell Telemetry</span>
-                        <span className="text-slate-400">Yesterday 09:15 GMT</span>
-                      </div>
-                      <p className="text-slate-200 text-xs md:text-sm leading-relaxed pt-1">
-                        Surveillance team confirmed co-location of Subject Bravo at Warehouse Hub 7. Recommending physical surveillance extension.
-                      </p>
-                    </div>
-                  </div>
+                  ) : (
+                    <p className="text-xs font-mono text-slate-500">No entities linked to this case file yet.</p>
+                  )}
                 </div>
+              </div>
+            </Card>
+          </div>
+        ) : (
+          <div className="lg:col-span-2">
+            <Card title="Case Inspector">
+              <div className="p-8 text-center text-slate-500 font-mono text-xs">
+                Select a case board to inspect detailed lead logs and entity links.
               </div>
             </Card>
           </div>

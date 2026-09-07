@@ -11,8 +11,10 @@ import {
   ResolutionCandidate,
   WhatIfResult,
   CopilotResponse,
-  AuditLog
+  AuditLog,
+  IngestionSummary
 } from '../types';
+
 
 import { 
   MOCK_ENTITIES, 
@@ -163,18 +165,17 @@ export const apiService = {
   queryCopilot: async (query: string, caseId?: string): Promise<CopilotResponse> => {
     const fallback: CopilotResponse = {
       query,
-      answer: "Analysis of graph topology indicates Subject Alpha connects to Subject Charlie via Subject Bravo (Alias: Apex), who acts as a critical bridge entity.",
-      confidence: 0.94,
+      answer: "No active network paths or entities match the query. Please ingest intelligence data or add entities to enable copilot analysis.",
+      confidence: 0.0,
       reasoning: [
-        "1-hop link: Subject Alpha (person-101) KNOWS Subject Bravo (person-102)",
-        "2-hop link: Subject Bravo (person-102) ASSOCIATED_WITH Subject Charlie (person-103)",
-        "Bridge entity identified: Subject Bravo (betweenness centrality = 0.89)"
+        "Knowledge graph is currently empty or contains no matching node records.",
+        "Ingest CDR, UPI/Financial logs, or FIR reports to populate graph topology."
       ],
-      supporting_evidence_ids: ["ev-001", "ev-004"],
-      supporting_entity_ids: ["person-101", "person-102", "person-103"],
+      supporting_evidence_ids: [],
+      supporting_entity_ids: [],
       suggested_investigative_actions: [
-        "Request CDR expansion for Burner #2",
-        "Execute What-If simulation removing Subject Bravo"
+        "Upload CDR or UPI log CSV feed",
+        "Add new entity manually via Dashboard"
       ]
     };
 
@@ -187,16 +188,16 @@ export const apiService = {
 
   runWhatIfSim: async (removedNodeIds: string[]): Promise<WhatIfResult> => {
     const fallback: WhatIfResult = {
-      simulation_id: `sim-mock-${Date.now()}`,
+      simulation_id: `sim-${Date.now()}`,
       removed_nodes: removedNodeIds,
       metrics: {
-        total_nodes_before: MOCK_GRAPH_DATA.nodes.length,
-        total_nodes_after: MOCK_GRAPH_DATA.nodes.length - removedNodeIds.length,
-        total_edges_before: MOCK_GRAPH_DATA.edges.length,
-        total_edges_after: MOCK_GRAPH_DATA.edges.length - (removedNodeIds.length * 3),
-        disconnected_clusters_count: 2,
-        impact_summary: `Removal of ${removedNodeIds.length} bridge node(s) fragmented logistics clusters and disconnected Subject Alpha from field operatives.`,
-        affected_entity_ids: MOCK_GRAPH_DATA.nodes.filter(n => !removedNodeIds.includes(n.id)).map(n => n.id)
+        total_nodes_before: 0,
+        total_nodes_after: 0,
+        total_edges_before: 0,
+        total_edges_after: 0,
+        disconnected_clusters_count: 0,
+        impact_summary: removedNodeIds.length > 0 ? `Simulated removal of ${removedNodeIds.length} target node(s).` : "No nodes selected for simulation.",
+        affected_entity_ids: []
       }
     };
 
@@ -221,5 +222,39 @@ export const apiService = {
 
   getDataSources: async (): Promise<DataSource[]> => {
     return fetchWithFallback<DataSource[]>(`${API_BASE}/data-sources`, MOCK_DATA_SOURCES);
+  },
+
+  uploadIngestionFile: async (file: File, sourceType?: string): Promise<IngestionSummary> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (sourceType) formData.append('source_type', sourceType);
+
+    const res = await fetch(`${API_BASE}/ingest/upload`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.detail || `Upload failed with status ${res.status}`);
+    }
+
+    return await res.json();
+  },
+
+  ingestRawText: async (text: string, title?: string, sourceType?: string): Promise<IngestionSummary> => {
+    const res = await fetch(`${API_BASE}/ingest/text`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, title, source_type: sourceType })
+    });
+
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      throw new Error(errJson.detail || `Text ingestion failed with status ${res.status}`);
+    }
+
+    return await res.json();
   }
 };
+

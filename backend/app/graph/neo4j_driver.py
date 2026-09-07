@@ -49,6 +49,14 @@ class Neo4jGraphDriver(AbstractGraphDriver):
         logger.info(f"Executing MERGE node Cypher for ID: {node_data.get('id')}")
         return node_data
 
+    def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
+        logger.info(f"Neo4j upsert node requested for ID: {node_data.get('id')} (stub mode)")
+        return {"record": node_data, "status": "added"}
+
     def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
         logger.info(f"Executing MERGE relationship Cypher for edge ID: {edge_data.get('id')}")
         return edge_data
+
+    def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
+        logger.info(f"Neo4j upsert relationship requested for edge ID: {edge_data.get('id')} (stub mode)")
+        return {"record": edge_data, "status": "added"}

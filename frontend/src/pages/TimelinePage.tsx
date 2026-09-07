@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../components/common/Card';
-import { Badge } from '../components/common/Badge';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { CytoscapeGraph } from '../components/graph/CytoscapeGraph';
 import { apiService } from '../services/api';
 import { NetworkGraphData } from '../types';
-import { Clock, Calendar, Play, Pause, RotateCcw, Filter, ArrowRight } from 'lucide-react';
+import { Clock, Calendar, Play, Pause, RotateCcw } from 'lucide-react';
 
 export const TimelinePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -94,8 +93,8 @@ export const TimelinePage: React.FC = () => {
           />
 
           <div className="flex justify-between text-xs font-mono text-slate-400">
-            <span>T-30 Days (Offshore Co Formed)</span>
-            <span>T-10 Days (Wire Transfer & Call Burst)</span>
+            <span>T-30 Days</span>
+            <span>T-15 Days</span>
             <span>Present (T-0)</span>
           </div>
         </div>
@@ -104,27 +103,24 @@ export const TimelinePage: React.FC = () => {
       {/* Graph & Event Stream Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          {graphData && <CytoscapeGraph graphData={graphData} height="540px" />}
+          {graphData && graphData.nodes.length > 0 ? (
+            <CytoscapeGraph graphData={graphData} height="540px" />
+          ) : (
+            <div className="h-[540px] bg-dark-950/80 border border-slate-800/80 rounded-xl flex flex-col items-center justify-center p-6 text-center space-y-3">
+              <Clock className="w-12 h-12 text-slate-600 animate-pulse" />
+              <h4 className="text-base font-bold text-slate-200">No Temporal Graph Data</h4>
+              <p className="text-xs text-slate-400 max-w-md">
+                Ingest CDR CSV or financial logs with timestamp attributes to reconstruct temporal network evolution.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Timeline Event Feed */}
         <Card title="Temporal Event Log Stream" subtitle="Chronological event occurrences driving network changes.">
-          <div className="space-y-3.5">
-            {[
-              { time: 'T-30 Days', title: 'Vortex Trading Corp Incorporated', type: 'CORPORATE_FILING', desc: 'Subject Alpha registered shell entity in offshore commercial registry.' },
-              { time: 'T-10 Days', title: 'Encrypted VOIP Burst Call Logged', type: 'CDR', desc: '47 short duration calls recorded between Burner #1 and Burner #2.' },
-              { time: 'T-10 Days', title: '$500,000 Layered Wire Transfer', type: 'BANK_WIRE', desc: 'High-velocity transaction executed to Crypto Mixer Wallet.' },
-              { time: 'T-5 Days', title: 'Co-Location Observed at Warehouse Hub 7', type: 'SURVEILLANCE', desc: 'Subject Bravo and Subject Charlie observed meeting at sector staging site.' },
-            ].map((ev, i) => (
-              <div key={i} className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-1.5 transition-all hover:border-slate-700/80">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-intel-cyan font-bold bg-intel-cyan/10 px-2 py-0.5 rounded border border-intel-cyan/30">{ev.time}</span>
-                  <span className="text-slate-400 bg-dark-900 px-2 py-0.5 rounded border border-slate-800/80">{ev.type}</span>
-                </div>
-                <h4 className="font-bold text-slate-100 text-sm leading-snug">{ev.title}</h4>
-                <p className="text-xs text-slate-300 leading-relaxed">{ev.desc}</p>
-              </div>
-            ))}
+          <div className="p-8 text-center bg-dark-950/60 border border-slate-800/80 rounded-xl space-y-2">
+            <p className="text-xs font-mono text-slate-400">No temporal events recorded.</p>
+            <p className="text-[11px] text-slate-500">Ingested telecommunications and financial records with timestamps will automatically populate this chronological feed.</p>
           </div>
         </Card>
       </div>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Card } from '../components/common/Card';
-import { Badge } from '../components/common/Badge';
 import { apiService } from '../services/api';
 import { CopilotResponse } from '../types';
-import { Bot, Send, Cpu, FileCheck2, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Bot, Send, Cpu, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export const CopilotPage: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -11,10 +10,10 @@ export const CopilotPage: React.FC = () => {
   const [copilotHistory, setCopilotHistory] = useState<CopilotResponse[]>([]);
 
   const sampleQuestions = [
-    "Find indirect connections between Subject Alpha and Subject Charlie.",
-    "Show relationships that appeared after the offshore incorporation.",
-    "Why was the $500,000 wire transfer flagged?",
-    "Which entities act as bridge nodes connecting the logistics group?"
+    "Find indirect connections between two entities in the graph.",
+    "Show high-risk transactions across ingested feeds.",
+    "Which entities act as bridge nodes in active cases?",
+    "Summarize key evidence records linked to target entities."
   ];
 
   const handleAsk = async (userQ: string) => {
@@ -104,22 +103,24 @@ export const CopilotPage: React.FC = () => {
                   </div>
 
                   {/* Reasoning Chain */}
-                  <div className="space-y-2">
-                    <h5 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-intel-cyan" /> Graph Topology Reasoning Chain
-                    </h5>
-                    <ul className="space-y-2 bg-dark-950/90 p-4 rounded-xl border border-slate-800/80 font-mono text-xs text-slate-200">
-                      {res.reasoning.map((r, idx) => (
-                        <li key={idx} className="flex items-center gap-2.5">
-                          <span className="text-intel-cyan font-bold">&bull;</span> {r}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {res.reasoning.length > 0 && (
+                    <div className="space-y-2">
+                      <h5 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <Cpu className="w-4 h-4 text-intel-cyan" /> Graph Topology Reasoning Chain
+                      </h5>
+                      <ul className="space-y-2 bg-dark-950/90 p-4 rounded-xl border border-slate-800/80 font-mono text-xs text-slate-200">
+                        {res.reasoning.map((r, idx) => (
+                          <li key={idx} className="flex items-center gap-2.5">
+                            <span className="text-intel-cyan font-bold">&bull;</span> {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {/* Evidence Citations */}
                   <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 text-xs font-mono">
-                    <span className="text-slate-400">Supporting Evidence: <strong className="text-emerald-400 font-bold">{res.supporting_evidence_ids.join(', ')}</strong></span>
+                    <span className="text-slate-400">Supporting Evidence: <strong className="text-emerald-400 font-bold">{res.supporting_evidence_ids.length > 0 ? res.supporting_evidence_ids.join(', ') : 'None'}</strong></span>
                     <span className="text-intel-cyan font-bold cursor-pointer hover:underline bg-intel-cyan/10 px-3 py-1 rounded-lg border border-intel-cyan/30">Inspect Citations &rarr;</span>
                   </div>
                 </div>
@@ -137,7 +138,7 @@ export const CopilotPage: React.FC = () => {
                   <CheckCircle2 className="w-4 h-4" /> Grounded in Knowledge Graph
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  The assistant queries Neo4j/Mock temporal graph data and verified evidence records. It strictly refrains from hallucinating unbacked facts.
+                  The assistant queries active graph data and verified evidence records. It strictly refrains from hallucinating unbacked facts.
                 </p>
               </div>
 
