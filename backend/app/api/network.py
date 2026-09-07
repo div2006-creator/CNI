@@ -5,6 +5,7 @@ from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/network", tags=["Network Analysis"])
 
+
 @router.get("", response_model=NetworkGraphResponse)
 def get_network_graph(
     min_risk: float = Query(0.0, ge=0.0, le=1.0, description="Minimum risk score threshold"),
@@ -31,8 +32,8 @@ def get_network_graph(
             source=e["source_id"],
             target=e["target_id"],
             type=e["type"],
-            confidence=e["confidence"],
-            weight=e["weight"],
+            confidence=e.get("confidence", 0.8),
+            weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
         )
         for e in raw["edges"]
@@ -71,8 +72,8 @@ def get_entity_subgraph(
             source=e["source_id"],
             target=e["target_id"],
             type=e["type"],
-            confidence=e["confidence"],
-            weight=e["weight"],
+            confidence=e.get("confidence", 0.8),
+            weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
         )
         for e in raw["edges"]
@@ -113,8 +114,8 @@ def get_shortest_path(
             source=e["source_id"],
             target=e["target_id"],
             type=e["type"],
-            confidence=e["confidence"],
-            weight=e["weight"],
+            confidence=e.get("confidence", 0.8),
+            weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
         )
         for e in raw_path["path_edges"]

@@ -35,7 +35,7 @@ def get_relationships(
 
 @router.post("", response_model=RelationshipResponse, status_code=201)
 def create_relationship(relationship: RelationshipCreate):
-    """Register a new connection edge between two entities."""
+    """Register or upsert a connection edge between two entities with deduplication."""
     import uuid
     new_id = f"rel-{str(uuid.uuid4())[:8]}"
     edge_data = {
@@ -45,14 +45,15 @@ def create_relationship(relationship: RelationshipCreate):
         "type": relationship.type.value,
         "confidence": relationship.confidence,
         "weight": relationship.weight,
-        "attributes": relationship.attributes,
-        "start_time": relationship.start_time,
-        "end_time": relationship.end_time,
+        "attributes": relationship.attributes or {},
+        "first_seen": relationship.first_seen,
+        "last_seen": relationship.last_seen,
     }
-    graph_driver.add_edge(edge_data)
-    src_node = graph_driver.get_entity_by_id(relationship.source_id)
-    tgt_node = graph_driver.get_entity_by_id(relationship.target_id)
-    res = dict(edge_data)
-    res["source_name"] = src_node["name"] if src_node else relationship.source_id
-    res["target_name"] = tgt_node["name"] if tgt_node else relationship.target_id
+    result_edge = graph_driver.upsert_edge(edge_data)
+    src_node = graph_driver.get_entity_by_id(result_edge["source_id"])
+    tgt_node = graph_driver.get_entity_by_id(result_edge["target_id"])
+    res = dict(result_edge)
+    res["source_name"] = src_node["name"] if src_node else result_edge["source_id"]
+    res["target_name"] = tgt_node["name"] if tgt_node else result_edge["target_id"]
     return res
+

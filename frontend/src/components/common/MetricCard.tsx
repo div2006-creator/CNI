@@ -17,22 +17,22 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   const isCalc = type === 'calculated';
 
   return (
-    <div className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-2 hover:border-slate-700/80 transition-all">
+    <div className="p-4 bg-[#f8f6f0] border border-[#e5dfd3] rounded-xl space-y-2 hover:border-saffron-300 transition-all">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">{label}</span>
+        <span className="text-xs font-mono uppercase tracking-wider text-stone-600 font-semibold">{label}</span>
         <span
           className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-md flex items-center gap-1 shrink-0 ${
             isCalc
-              ? 'bg-blue-50 text-intel-blue border border-blue-200'
-              : 'bg-violet-50 text-violet-700 border border-violet-200'
+              ? 'bg-saffron-50 text-saffron-700 border border-saffron-200'
+              : 'bg-purple-50 text-purple-700 border border-purple-200'
           }`}
         >
-          {isCalc ? <Calculator className="w-3 h-3" /> : <Cpu className="w-3 h-3" />}
+          {isCalc ? <Calculator className="w-3 h-3 text-saffron-600" /> : <Cpu className="w-3 h-3 text-purple-600" />}
           {isCalc ? 'Graph Metric' : 'AI Inference'}
         </span>
       </div>
-      <div className="text-xl font-bold font-mono text-slate-100">{value}</div>
-      {description && <p className="text-xs text-slate-400 font-sans leading-relaxed">{description}</p>}
+      <div className="text-xl font-bold font-mono text-stone-900">{value}</div>
+      {description && <p className="text-xs text-stone-600 font-sans leading-relaxed">{description}</p>}
     </div>
   );
 };

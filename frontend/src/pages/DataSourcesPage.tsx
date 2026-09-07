@@ -31,13 +31,13 @@ export const DataSourcesPage: React.FC = () => {
   const getSourceIcon = (type: string) => {
     switch (type) {
       case 'STRUCTURED_LOGS':
-        return <FileSpreadsheet className="w-5 h-5 text-cyan-400" />;
+        return <FileSpreadsheet className="w-5 h-5 text-indigo-700" />;
       case 'CALL_METADATA':
-        return <Radio className="w-5 h-5 text-indigo-400" />;
+        return <Radio className="w-5 h-5 text-saffron-600" />;
       case 'UNSTRUCTURED_TEXT':
-        return <FileText className="w-5 h-5 text-emerald-400" />;
+        return <FileText className="w-5 h-5 text-emerald-700" />;
       default:
-        return <Database className="w-5 h-5 text-purple-400" />;
+        return <Database className="w-5 h-5 text-purple-700" />;
     }
   };
 
@@ -46,16 +46,17 @@ export const DataSourcesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <Database className="w-7 h-7 text-intel-cyan" /> Data Sources & Ingestion Feeds
+          <h2 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+            <Database className="w-7 h-7 text-saffron-600" /> Data Sources & Ingestion Feeds
           </h2>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-stone-600 mt-1 leading-relaxed">
             Overview of structured financial logs, call telemetry metadata, and unstructured intelligence feeds.
           </p>
         </div>
+
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-intel-cyan hover:bg-cyan-400 text-dark-950 font-bold text-xs font-mono rounded-xl transition-all shadow-md"
+          className="flex items-center gap-2 px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs font-mono rounded-xl transition-all shadow-sm"
         >
           <Upload className="w-4 h-4" /> Upload & Ingest File
         </button>
@@ -64,39 +65,39 @@ export const DataSourcesPage: React.FC = () => {
       {/* Sources Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {sources.map((src) => (
-          <Card key={src.id} className="border-slate-800/80 hover:border-slate-700">
+          <Card key={src.id} className="border-[#e5dfd3] bg-[#fcfcf9] hover:border-saffron-300">
             <div className="space-y-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3.5">
-                  <div className="p-3 bg-dark-950/90 border border-slate-800/80 rounded-2xl shadow-inner">
+                  <div className="p-3 bg-[#f8f6f0] border border-[#e5dfd3] rounded-2xl shadow-inner">
                     {getSourceIcon(src.source_type)}
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-100">{src.name}</h3>
-                    <span className="text-xs font-mono text-slate-400 bg-dark-950 px-2 py-0.5 rounded border border-slate-800/80">{src.source_type}</span>
+                    <h3 className="text-base font-bold text-stone-900">{src.name}</h3>
+                    <span className="text-xs font-mono text-stone-700 bg-[#f3efe6] px-2 py-0.5 rounded border border-[#e5dfd3]">{src.source_type}</span>
                   </div>
                 </div>
                 <Badge label={src.status} variant="status" typeValue={src.status} size="sm" />
               </div>
 
-              <p className="text-xs md:text-sm text-slate-300 leading-relaxed">{src.description}</p>
+              <p className="text-xs md:text-sm text-stone-600 leading-relaxed">{src.description}</p>
 
               {/* Confidence & Records Stats */}
-              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800/80 font-mono text-xs">
-                <div className="bg-dark-950/90 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#e5dfd3] font-mono text-xs">
+                <div className="bg-[#f8f6f0] p-3.5 rounded-xl border border-[#e5dfd3] space-y-1">
                   <span className="intel-data-label">Confidence Rating</span>
-                  <span className="text-slate-100 font-bold text-base">{(src.confidence_score * 100).toFixed(0)}%</span>
+                  <span className="text-stone-900 font-bold text-base">{(src.confidence_score * 100).toFixed(0)}%</span>
                 </div>
-                <div className="bg-dark-950/90 p-3.5 rounded-xl border border-slate-800/80 space-y-1">
+                <div className="bg-[#f8f6f0] p-3.5 rounded-xl border border-[#e5dfd3] space-y-1">
                   <span className="intel-data-label">Ingested Records</span>
-                  <span className="text-intel-cyan font-bold text-base">{src.records_ingested.toLocaleString()}</span>
+                  <span className="text-saffron-700 font-bold text-base">{src.records_ingested.toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="text-xs font-mono text-slate-400 flex justify-between items-center pt-1">
-                <span>Last Sync: <strong className="text-slate-200">{new Date(src.last_ingested_at).toLocaleTimeString()}</strong></span>
-                <span className="text-emerald-400 font-bold flex items-center gap-1.5 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-800/80">
-                  <CheckCircle className="w-3.5 h-3.5" /> Pipeline Validated
+              <div className="text-xs font-mono text-stone-600 flex justify-between items-center pt-1">
+                <span>Last Sync: <strong className="text-stone-900">{new Date(src.last_ingested_at).toLocaleTimeString()}</strong></span>
+                <span className="text-emerald-800 font-bold flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Pipeline Validated
                 </span>
               </div>
             </div>
@@ -112,4 +113,3 @@ export const DataSourcesPage: React.FC = () => {
     </div>
   );
 };
-

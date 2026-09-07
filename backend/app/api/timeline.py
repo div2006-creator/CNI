@@ -5,6 +5,7 @@ from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/timeline", tags=["Temporal Graph Analysis"])
 
+
 @router.get("", response_model=NetworkGraphResponse)
 def get_temporal_graph(
     start_date: Optional[str] = Query(None, description="Filter start ISO date"),

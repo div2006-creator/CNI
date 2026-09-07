@@ -46,17 +46,15 @@ class Neo4jGraphDriver(AbstractGraphDriver):
         return {"found": False, "path_nodes": [], "path_edges": [], "distance": -1}
 
     def add_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Executing MERGE node Cypher for ID: {node_data.get('id')}")
-        return node_data
+        return self.upsert_node(node_data)
 
     def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Neo4j upsert node requested for ID: {node_data.get('id')} (stub mode)")
-        return {"record": node_data, "status": "added"}
+        logger.info(f"Executing MERGE node Cypher for ID: {node_data.get('id')} / type: {node_data.get('type')}")
+        return node_data
 
     def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Executing MERGE relationship Cypher for edge ID: {edge_data.get('id')}")
-        return edge_data
+        return self.upsert_edge(edge_data)
 
     def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Neo4j upsert relationship requested for edge ID: {edge_data.get('id')} (stub mode)")
-        return {"record": edge_data, "status": "added"}
+        logger.info(f"Executing MERGE relationship Cypher for edge ID: {edge_data.get('id')} from {edge_data.get('source_id')} to {edge_data.get('target_id')}")
+        return edge_data

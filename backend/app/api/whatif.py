@@ -5,6 +5,7 @@ from app.graph.store import graph_driver
 
 router = APIRouter(prefix="/whatif", tags=["What-If Network Analysis"])
 
+
 @router.post("/simulate", response_model=WhatIfSimResult)
 def simulate_network_impact(req: WhatIfSimRequest):
     """

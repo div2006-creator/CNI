@@ -8,6 +8,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        cream: {
+          50: '#fcfcf9',
+          100: '#f8f6f0',
+          200: '#f0ebd9',
+          300: '#e2dacd',
+          400: '#c8bfae',
+          800: '#292524',
+          900: '#1c1917',
+        },
+        saffron: {
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+        },
         dark: {
           950: '#f7f9fc',
           900: '#ffffff',
@@ -17,24 +31,13 @@ export default {
           600: '#aab6c5',
         },
         intel: {
-          cyan: '#183b70',
-          blue: '#2457a6',
-          emerald: '#10b981',
-          amber: '#f59e0b',
-          rose: '#f43f5e',
-          purple: '#8b5cf6'
-        },
-        slate: {
-          100: '#17233a',
-          200: '#24324a',
-          300: '#40516c',
-          400: '#63738b',
-          500: '#8390a2',
-          600: '#68778e',
-          700: '#52627a',
-          800: '#d4dbe5',
-          900: '#e7ebf1',
-          950: '#f7f9fc'
+          cyan: '#0284c7',
+          blue: '#2563eb',
+          emerald: '#059669',
+          amber: '#d97706',
+          rose: '#e11d48',
+          purple: '#7c3aed',
+          saffron: '#ea580c'
         }
       },
       fontFamily: {

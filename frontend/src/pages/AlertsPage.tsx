@@ -34,20 +34,20 @@ export const AlertsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <AlertTriangle className="w-7 h-7 text-rose-500" /> Suspicious Pattern Alerts Center
+          <h2 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+            <AlertTriangle className="w-7 h-7 text-saffron-600" /> Suspicious Pattern Alerts Center
           </h2>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-stone-600 mt-1 leading-relaxed">
             Explainable AI & graph rule anomalies automatically flagged across financial transfers and communications.
           </p>
         </div>
 
         {/* Severity Filter Tabs */}
-        <div className="flex items-center gap-2 p-1.5 bg-dark-900/90 border border-slate-800/80 rounded-2xl">
+        <div className="flex items-center gap-2 p-1.5 bg-[#f3efe6] border border-[#e5dfd3] rounded-2xl">
           <button
             onClick={() => setSelectedSeverity('')}
             className={`px-4 py-2 text-xs font-mono rounded-xl transition-all ${
-              selectedSeverity === '' ? 'bg-slate-800 text-slate-100 font-bold shadow-sm' : 'text-slate-400 hover:text-slate-200'
+              selectedSeverity === '' ? 'bg-white text-stone-900 font-bold shadow-sm border border-[#e5dfd3]' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             All Severities ({alerts.length})
@@ -59,7 +59,7 @@ export const AlertsPage: React.FC = () => {
                 key={s}
                 onClick={() => setSelectedSeverity(s)}
                 className={`px-3.5 py-2 text-xs font-mono rounded-xl transition-all ${
-                  selectedSeverity === s ? 'bg-rose-950/80 text-rose-300 border border-rose-800/80 font-bold shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                  selectedSeverity === s ? 'bg-rose-100 text-rose-800 border border-rose-300 font-bold shadow-sm' : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 {s} ({count})
@@ -72,7 +72,7 @@ export const AlertsPage: React.FC = () => {
       {/* Alerts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filtered.map((alert) => (
-          <Card key={alert.id} className="border-slate-800/80 hover:border-slate-700">
+          <Card key={alert.id} className="border-[#e5dfd3] bg-[#fcfcf9] hover:border-saffron-300">
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-2">
                 <Badge label={alert.severity} variant="severity" typeValue={alert.severity} size="sm" />
@@ -80,22 +80,22 @@ export const AlertsPage: React.FC = () => {
               </div>
 
               <div>
-                <span className="text-xs font-mono text-intel-cyan uppercase tracking-wider font-bold block mb-1">{alert.pattern_type}</span>
-                <h3 className="text-base font-bold text-slate-100 mb-1.5">{alert.title}</h3>
-                <p className="text-xs md:text-sm text-slate-300 leading-relaxed">{alert.description}</p>
+                <span className="text-xs font-mono text-saffron-700 uppercase tracking-wider font-bold block mb-1">{alert.pattern_type}</span>
+                <h3 className="text-base font-bold text-stone-900 mb-1.5">{alert.title}</h3>
+                <p className="text-xs md:text-sm text-stone-600 leading-relaxed">{alert.description}</p>
               </div>
 
               {/* Explainable Insight Box */}
-              <div className="p-4 bg-dark-950/90 border border-slate-800/80 rounded-xl space-y-1.5">
-                <div className="flex items-center gap-2 text-intel-cyan font-mono text-xs font-bold uppercase tracking-wider">
-                  <Cpu className="w-4 h-4" /> Explainable Graph Pattern Rule
+              <div className="p-4 bg-[#f8f6f0] border border-[#e5dfd3] rounded-xl space-y-1.5">
+                <div className="flex items-center gap-2 text-indigo-700 font-mono text-xs font-bold uppercase tracking-wider">
+                  <Cpu className="w-4 h-4 text-saffron-600" /> Explainable Graph Pattern Rule
                 </div>
-                <p className="text-slate-300 text-xs leading-relaxed">{alert.explanation}</p>
+                <p className="text-stone-700 text-xs leading-relaxed">{alert.explanation}</p>
               </div>
 
-              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Calculated Risk Score: <strong className="text-rose-400 font-bold text-sm">{(alert.risk_score * 100).toFixed(0)}%</strong></span>
-                <button className="flex items-center gap-1.5 text-xs font-mono font-bold text-intel-cyan hover:underline bg-intel-cyan/10 px-3 py-1.5 rounded-lg border border-intel-cyan/30">
+              <div className="pt-3 border-t border-[#e5dfd3] flex items-center justify-between text-xs font-mono">
+                <span className="text-stone-600">Calculated Risk Score: <strong className="text-rose-600 font-bold text-sm">{(alert.risk_score * 100).toFixed(0)}%</strong></span>
+                <button className="flex items-center gap-1.5 text-xs font-mono font-bold text-saffron-700 hover:underline bg-saffron-50 px-3 py-1.5 rounded-lg border border-saffron-200">
                   Inspect Linked Entities &rarr;
                 </button>
               </div>

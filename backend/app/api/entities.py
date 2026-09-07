@@ -39,7 +39,7 @@ def get_entity_detail(entity_id: str):
 
 @router.post("", response_model=EntityResponse, status_code=201)
 def create_entity(entity: EntityCreate):
-    """Create a new entity record in the system."""
+    """Create or upsert an entity record in the system with deduplication."""
     import uuid, datetime
     new_id = f"entity-{str(uuid.uuid4())[:8]}"
     now = datetime.datetime.utcnow().isoformat() + "Z"
@@ -49,11 +49,12 @@ def create_entity(entity: EntityCreate):
         "type": entity.type.value,
         "risk_level": entity.risk_level.value,
         "risk_score": entity.risk_score,
-        "attributes": entity.attributes,
-        "tags": entity.tags,
+        "attributes": entity.attributes or {},
+        "tags": entity.tags or [],
         "created_at": now,
         "updated_at": now,
         "connection_count": 0
     }
-    graph_driver.add_node(node_data)
-    return node_data
+    result_node = graph_driver.upsert_node(node_data)
+    return result_node
+

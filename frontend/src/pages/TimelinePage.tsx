@@ -44,26 +44,26 @@ export const TimelinePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <Clock className="w-7 h-7 text-intel-cyan" /> Temporal Network Analysis & Time Machine
+          <h2 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+            <Clock className="w-7 h-7 text-saffron-600" /> Temporal Network Analysis & Time Machine
           </h2>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-stone-600 mt-1 leading-relaxed">
             Track how relationships emerged, evolved, or dissolved over time across surveillance logs and CDR telemetry.
           </p>
         </div>
 
         {/* Play / Pause Controls */}
-        <div className="flex items-center gap-3 bg-dark-900/90 border border-slate-800/80 p-2 rounded-2xl font-mono text-xs shadow-md">
+        <div className="flex items-center gap-3 bg-[#f3efe6] border border-[#e5dfd3] p-2 rounded-2xl font-mono text-xs shadow-sm">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex items-center gap-2 px-4 py-2 bg-intel-cyan text-dark-950 font-bold rounded-xl hover:bg-cyan-300 transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-saffron-500 text-white font-bold rounded-xl hover:bg-saffron-600 transition-all shadow-sm"
           >
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             {isPlaying ? 'Pause Replay' : 'Play Network Timeline'}
           </button>
           <button
             onClick={() => { setSelectedDay(30); setIsPlaying(false); }}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-dark-850 rounded-xl transition-all"
+            className="p-2 text-stone-600 hover:text-stone-900 hover:bg-[#f0ebd9] rounded-xl transition-all"
             title="Reset Timeline"
           >
             <RotateCcw className="w-4 h-4" />
@@ -72,13 +72,13 @@ export const TimelinePage: React.FC = () => {
       </div>
 
       {/* Timeline Controls Card */}
-      <Card className="border-intel-cyan/40 bg-dark-900/90">
+      <Card className="border-saffron-300 bg-[#fcfcf9]">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs md:text-sm font-mono">
-            <span className="text-slate-300 flex items-center gap-2 font-bold">
-              <Calendar className="w-4 h-4 text-intel-cyan" /> Temporal Window Slider
+            <span className="text-stone-900 flex items-center gap-2 font-bold">
+              <Calendar className="w-4 h-4 text-saffron-600" /> Temporal Window Slider
             </span>
-            <span className="text-intel-cyan font-bold bg-intel-cyan/10 px-3 py-1 rounded-lg border border-intel-cyan/30">
+            <span className="text-saffron-700 font-bold bg-saffron-50 px-3 py-1 rounded-lg border border-saffron-200">
               Active Graph State at T - {30 - selectedDay} Days
             </span>
           </div>
@@ -89,10 +89,10 @@ export const TimelinePage: React.FC = () => {
             max="30"
             value={selectedDay}
             onChange={(e) => setSelectedDay(parseInt(e.target.value))}
-            className="w-full accent-intel-cyan cursor-pointer h-2 bg-dark-950 rounded-lg border border-slate-800"
+            className="w-full accent-saffron-600 cursor-pointer h-2 bg-[#f8f6f0] rounded-lg border border-[#e5dfd3]"
           />
 
-          <div className="flex justify-between text-xs font-mono text-slate-400">
+          <div className="flex justify-between text-xs font-mono text-stone-600">
             <span>T-30 Days</span>
             <span>T-15 Days</span>
             <span>Present (T-0)</span>
@@ -106,10 +106,10 @@ export const TimelinePage: React.FC = () => {
           {graphData && graphData.nodes.length > 0 ? (
             <CytoscapeGraph graphData={graphData} height="540px" />
           ) : (
-            <div className="h-[540px] bg-dark-950/80 border border-slate-800/80 rounded-xl flex flex-col items-center justify-center p-6 text-center space-y-3">
-              <Clock className="w-12 h-12 text-slate-600 animate-pulse" />
-              <h4 className="text-base font-bold text-slate-200">No Temporal Graph Data</h4>
-              <p className="text-xs text-slate-400 max-w-md">
+            <div className="h-[540px] bg-[#f8f6f0] border border-[#e5dfd3] rounded-xl flex flex-col items-center justify-center p-6 text-center space-y-3">
+              <Clock className="w-12 h-12 text-stone-400 animate-pulse" />
+              <h4 className="text-base font-bold text-stone-800">No Temporal Graph Data</h4>
+              <p className="text-xs text-stone-600 max-w-md">
                 Ingest CDR CSV or financial logs with timestamp attributes to reconstruct temporal network evolution.
               </p>
             </div>
@@ -117,10 +117,10 @@ export const TimelinePage: React.FC = () => {
         </div>
 
         {/* Timeline Event Feed */}
-        <Card title="Temporal Event Log Stream" subtitle="Chronological event occurrences driving network changes.">
-          <div className="p-8 text-center bg-dark-950/60 border border-slate-800/80 rounded-xl space-y-2">
-            <p className="text-xs font-mono text-slate-400">No temporal events recorded.</p>
-            <p className="text-[11px] text-slate-500">Ingested telecommunications and financial records with timestamps will automatically populate this chronological feed.</p>
+        <Card title="Temporal Event Log Stream" subtitle="Chronological event occurrences driving network changes." className="bg-[#fcfcf9] border-[#e5dfd3]">
+          <div className="p-8 text-center bg-[#f8f6f0] border border-[#e5dfd3] rounded-xl space-y-2">
+            <p className="text-xs font-mono text-stone-600">No temporal events recorded.</p>
+            <p className="text-[11px] text-stone-500">Ingested telecommunications and financial records with timestamps will automatically populate this chronological feed.</p>
           </div>
         </Card>
       </div>

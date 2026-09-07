@@ -31,10 +31,10 @@ export const AuditPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <History className="w-7 h-7 text-intel-cyan" /> Investigator Audit Trail Log
+          <h2 className="text-2xl font-bold text-stone-900 flex items-center gap-3">
+            <History className="w-7 h-7 text-saffron-600" /> Investigator Audit Trail Log
           </h2>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-stone-600 mt-1 leading-relaxed">
             Tamper-evident log of all investigative searches, evidence inspections, what-if executions, and report generations.
           </p>
         </div>
@@ -54,24 +54,24 @@ export const AuditPage: React.FC = () => {
             </thead>
             <tbody className="font-mono text-xs">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-dark-850/80 transition-colors">
-                  <td className="text-slate-400 font-semibold">
+                <tr key={log.id} className="hover:bg-[#f3efe6]/80 transition-colors">
+                  <td className="text-stone-600 font-semibold">
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
-                  <td className="font-bold text-intel-cyan">
+                  <td className="font-bold text-saffron-700">
                     {log.investigator_id}
                   </td>
                   <td>
-                    <span className="px-2.5 py-1 bg-intel-cyan/10 border border-intel-cyan/30 rounded-md text-intel-cyan text-xs font-bold">
+                    <span className="px-2.5 py-1 bg-saffron-50 border border-saffron-200 rounded-md text-saffron-700 text-xs font-bold">
                       {log.action_type}
                     </span>
                   </td>
-                  <td className="font-semibold text-slate-100 font-sans">
+                  <td className="font-semibold text-stone-900 font-sans">
                     {log.target_resource}
                   </td>
-                  <td className="text-slate-400 text-xs font-sans">
+                  <td className="text-stone-600 text-xs font-sans">
                     {typeof log.details === 'object' ? (
-                      <span className="px-2 py-1 bg-dark-950 border border-slate-800/80 rounded-md inline-block font-mono text-[11px] text-slate-300">
+                      <span className="px-2 py-1 bg-[#f8f6f0] border border-[#e5dfd3] rounded-md inline-block font-mono text-[11px] text-stone-800">
                         {JSON.stringify(log.details)}
                       </span>
                     ) : log.details}

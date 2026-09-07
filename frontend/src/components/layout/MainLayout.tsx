@@ -17,7 +17,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-dark-950 text-slate-200">
+    <div className="flex min-h-screen bg-[#f8f6f0] text-stone-900">
       {/* Fixed Left Sidebar */}
       <Sidebar />
 
