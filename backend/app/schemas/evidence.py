@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
+from app.schemas.fact import FactType, EvidenceProvenance
 
 class EvidenceBase(BaseModel):
     title: str
@@ -13,6 +14,10 @@ class EvidenceBase(BaseModel):
     linked_entity_ids: List[str] = Field(default_factory=list)
     linked_relationship_ids: List[str] = Field(default_factory=list)
     reliability_level: Optional[str] = Field("HIGH", description="HIGH, MEDIUM, or LOW")
+    case_id: Optional[str] = Field("DEMO-CASE-001", description="Associated case identifier")
+    fact_type: FactType = Field(FactType.DOCUMENT_FACT, description="DOCUMENT_FACT, ANALYTICAL_INFERENCE, or UNRESOLVED_CONFLICT")
+    provenance: Optional[EvidenceProvenance] = None
+    source_document_id: Optional[str] = None
 
 class EvidenceCreate(EvidenceBase):
     pass
@@ -36,6 +41,7 @@ class TimelineEvent(BaseModel):
     label: str
     source_type: str
     description: str
+    case_id: Optional[str] = "DEMO-CASE-001"
 
 class RelationshipEvidenceExplanation(BaseModel):
     relationship_id: str
@@ -50,3 +56,5 @@ class RelationshipEvidenceExplanation(BaseModel):
     source_reliability: List[SourceReliabilityRating] = Field(default_factory=list)
     timeline: List[TimelineEvent] = Field(default_factory=list)
     evidence_items: List[EvidenceResponse] = Field(default_factory=list)
+    case_id: Optional[str] = "DEMO-CASE-001"
+    fact_type: FactType = FactType.ANALYTICAL_INFERENCE

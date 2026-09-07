@@ -1,5 +1,6 @@
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
+from app.schemas.fact import FactType, EvidenceProvenance
 
 class ParsedEntity(BaseModel):
     id: str
@@ -9,6 +10,8 @@ class ParsedEntity(BaseModel):
     risk_score: float = 0.5
     attributes: Dict[str, Any] = Field(default_factory=dict)
     tags: List[str] = Field(default_factory=list)
+    case_id: Optional[str] = "DEMO-CASE-001"
+    source_ids: List[str] = Field(default_factory=list)
 
 class ParsedRelationship(BaseModel):
     id: str
@@ -20,6 +23,11 @@ class ParsedRelationship(BaseModel):
     attributes: Dict[str, Any] = Field(default_factory=dict)
     timestamp: Optional[str] = None
     evidence_id: Optional[str] = None
+    case_id: Optional[str] = "DEMO-CASE-001"
+    fact_type: FactType = FactType.ANALYTICAL_INFERENCE
+    status: str = Field("OBSERVED", description="OBSERVED, CANDIDATE, UNDER_REVIEW, REQUIRES_VERIFICATION, SUPPORTED, CONTRADICTED, REJECTED")
+    source_ids: List[str] = Field(default_factory=list)
+    provenance: Optional[EvidenceProvenance] = None
 
 class IngestionSummary(BaseModel):
     status: str = "SUCCESS"
@@ -33,8 +41,10 @@ class IngestionSummary(BaseModel):
     evidence_id: str
     message: str = "Data successfully ingested into intelligence graph."
     warnings: List[str] = Field(default_factory=list)
+    case_id: Optional[str] = "DEMO-CASE-001"
 
 class TextInputIngest(BaseModel):
     text: str
     title: Optional[str] = "Pasted Intelligence Field Report"
     source_type: Optional[str] = "FIR_REPORT"
+    case_id: Optional[str] = "DEMO-CASE-001"

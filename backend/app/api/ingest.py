@@ -11,11 +11,12 @@ router = APIRouter(prefix="/ingest", tags=["Live Data Ingestion Engine"])
 @router.post("/upload", response_model=IngestionSummary)
 async def upload_and_ingest_file(
     file: UploadFile = File(...),
-    source_type: Optional[str] = Form(None)
+    source_type: Optional[str] = Form(None),
+    case_id: Optional[str] = Form(None)
 ):
     """
     Ingest a CDR CSV, UPI/Financial transaction CSV, or FIR report text file.
-    Extracts entities & relationships and immediately updates the active Knowledge Graph.
+    Extracts entities & relationships and immediately updates the active Knowledge Graph scoped by case_id.
     """
     if not file.filename:
         raise HTTPException(status_code=400, detail="Uploaded file must have a valid filename.")
@@ -27,7 +28,8 @@ async def upload_and_ingest_file(
         summary = IngestionEngine.ingest_content(
             content=content_str,
             filename=file.filename,
-            source_type=source_type
+            source_type=source_type,
+            case_id=case_id or "DEMO-CASE-001"
         )
         return summary
     except Exception as exc:
@@ -46,7 +48,8 @@ def ingest_raw_text(payload: TextInputIngest):
         summary = IngestionEngine.ingest_content(
             content=payload.text,
             filename=payload.title or "field_report.txt",
-            source_type=payload.source_type or "FIR_REPORT"
+            source_type=payload.source_type or "FIR_REPORT",
+            case_id=payload.case_id or "DEMO-CASE-001"
         )
         return summary
     except Exception as exc:

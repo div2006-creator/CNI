@@ -11,6 +11,26 @@ export type EntityType =
 
 export type RiskLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
 
+export type FactType = 'DOCUMENT_FACT' | 'ANALYTICAL_INFERENCE' | 'UNRESOLVED_CONFLICT';
+
+export type RelationshipStatus = 
+  | 'OBSERVED' 
+  | 'CANDIDATE' 
+  | 'UNDER_REVIEW' 
+  | 'REQUIRES_VERIFICATION' 
+  | 'SUPPORTED' 
+  | 'CONTRADICTED' 
+  | 'REJECTED';
+
+export interface EvidenceProvenance {
+  source_document_id?: string;
+  page_number?: number;
+  line_number?: number;
+  start_offset?: number;
+  end_offset?: number;
+  row_number?: number;
+}
+
 export interface Entity {
   id: string;
   name: string;
@@ -27,6 +47,9 @@ export interface Entity {
   centrality?: number;
   role?: string;
   aliases?: string[];
+  case_id?: string;
+  case_ids?: string[];
+  source_ids?: string[];
 }
 
 export type RelationshipType = 
@@ -60,6 +83,11 @@ export interface Relationship {
   extraction_method?: string;
   source_name?: string;
   target_name?: string;
+  case_id?: string;
+  fact_type?: FactType;
+  status?: RelationshipStatus;
+  source_ids?: string[];
+  provenance?: EvidenceProvenance;
 }
 
 export interface NetworkNode {
@@ -70,6 +98,7 @@ export interface NetworkNode {
   risk_score: number;
   properties: Record<string, any>;
   is_bridge_node?: boolean;
+  case_id?: string;
 }
 
 export interface NetworkEdge {
@@ -82,6 +111,9 @@ export interface NetworkEdge {
   properties: Record<string, any>;
   timestamp?: string;
   evidence_id?: string;
+  case_id?: string;
+  fact_type?: FactType;
+  status?: RelationshipStatus;
 }
 
 export interface NetworkGraphData {
@@ -110,6 +142,10 @@ export interface EvidenceItem {
   linked_entity_ids: string[];
   linked_relationship_ids: string[];
   reliability_level?: string;
+  case_id?: string;
+  fact_type?: FactType;
+  source_document_id?: string;
+  provenance?: EvidenceProvenance;
 }
 
 export interface SignalContribution {
@@ -129,6 +165,7 @@ export interface TimelineEvent {
   label: string;
   source_type: string;
   description: string;
+  case_id?: string;
 }
 
 export interface RelationshipEvidenceExplanation {
@@ -144,8 +181,9 @@ export interface RelationshipEvidenceExplanation {
   source_reliability: SourceReliabilityRating[];
   timeline: TimelineEvent[];
   evidence_items: EvidenceItem[];
+  case_id?: string;
+  fact_type?: FactType;
 }
-
 
 export interface ResolutionCandidate {
   id: string;
@@ -187,7 +225,6 @@ export interface CopilotResponse {
   suggested_investigative_actions: string[];
 }
 
-
 export interface AuditLog {
   id: string;
   investigator_id: string;
@@ -195,6 +232,7 @@ export interface AuditLog {
   target_resource: string;
   details: Record<string, any>;
   timestamp: string;
+  case_id?: string;
 }
 
 export type AlertSeverity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -212,6 +250,7 @@ export interface Alert {
   explanation: string;
   created_at: string;
   updated_at: string;
+  case_id?: string;
 }
 
 export type CasePriority = 'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -244,6 +283,20 @@ export interface DataSource {
   status: SourceStatus;
   records_ingested: number;
   last_ingested_at: string;
+  case_id?: string;
+}
+
+export interface SourceDocument {
+  source_document_id: string;
+  case_id: string;
+  filename: string;
+  source_type: string;
+  ingested_at: string;
+  checksum?: string;
+  status: string;
+  record_count: number;
+  file_size?: number;
+  mime_type?: string;
 }
 
 export interface CentralityItem {
@@ -305,7 +358,6 @@ export interface PatternIndicatorItem {
   disclaimer: string;
 }
 
-
 export interface FinancialAnalyticsData {
   summary: Record<string, any>;
   flow_stages: MoneyFlowStage[];
@@ -337,6 +389,8 @@ export interface CandidateLinkPair {
   status: 'PENDING_REVIEW' | 'CONFIRMED' | 'REJECTED' | 'NEED_MORE_EVIDENCE';
   investigative_lead: string;
   disclaimer: string;
+  case_id?: string;
+  fact_type?: FactType;
 }
 
 export interface InvestigatorReviewResponse {
@@ -346,6 +400,7 @@ export interface InvestigatorReviewResponse {
   audit_id: string;
   message: string;
   created_relationship_id?: string;
+  case_id?: string;
 }
 
 export interface SystemHealth {
@@ -372,5 +427,5 @@ export interface IngestionSummary {
   evidence_id: string;
   message: string;
   warnings: string[];
+  case_id?: string;
 }
-

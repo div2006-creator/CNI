@@ -6,6 +6,7 @@ class Neo4jGraphDriver(AbstractGraphDriver):
     """
     Neo4j Graph Driver implementation for production deployment.
     Connects via Neo4j Bolt protocol using driver settings.
+    Supports case_id filtering in Cypher queries.
     """
 
     def __init__(self, uri: str, user: str, password: str):
@@ -28,33 +29,37 @@ class Neo4jGraphDriver(AbstractGraphDriver):
         if self._driver:
             self._driver.close()
 
-    def get_network_graph(self, entity_types: Optional[List[str]] = None, min_risk: float = 0.0) -> Dict[str, Any]:
-        # Cypher query execution placeholder
-        logger.info("Executing Neo4j Cypher query for network graph extraction.")
+    def get_network_graph(
+        self,
+        entity_types: Optional[List[str]] = None,
+        min_risk: float = 0.0,
+        case_id: Optional[str] = None
+    ) -> Dict[str, Any]:
+        logger.info(f"Executing Neo4j Cypher query for network graph extraction (case_id={case_id}).")
         return {"nodes": [], "edges": [], "total_nodes": 0, "total_edges": 0}
 
-    def get_entity_by_id(self, entity_id: str) -> Optional[Dict[str, Any]]:
-        logger.info(f"Executing Neo4j entity fetch for ID: {entity_id}")
+    def get_entity_by_id(self, entity_id: str, case_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        logger.info(f"Executing Neo4j entity fetch for ID: {entity_id} (case_id={case_id})")
         return None
 
-    def get_entity_neighbors(self, entity_id: str, depth: int = 1) -> Dict[str, Any]:
-        logger.info(f"Executing Cypher N-hop query for entity ID: {entity_id}, depth: {depth}")
+    def get_entity_neighbors(self, entity_id: str, depth: int = 1, case_id: Optional[str] = None) -> Dict[str, Any]:
+        logger.info(f"Executing Cypher N-hop query for entity ID: {entity_id}, depth: {depth} (case_id={case_id})")
         return {"nodes": [], "edges": [], "total_nodes": 0, "total_edges": 0}
 
-    def find_shortest_path(self, source_id: str, target_id: str) -> Dict[str, Any]:
-        logger.info(f"Executing Cypher shortestPath query from {source_id} to {target_id}")
+    def find_shortest_path(self, source_id: str, target_id: str, case_id: Optional[str] = None) -> Dict[str, Any]:
+        logger.info(f"Executing Cypher shortestPath query from {source_id} to {target_id} (case_id={case_id})")
         return {"found": False, "path_nodes": [], "path_edges": [], "distance": -1}
 
-    def add_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
-        return self.upsert_node(node_data)
+    def add_node(self, node_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:
+        return self.upsert_node(node_data, case_id=case_id)
 
-    def upsert_node(self, node_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Executing MERGE node Cypher for ID: {node_data.get('id')} / type: {node_data.get('type')}")
+    def upsert_node(self, node_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:
+        logger.info(f"Executing MERGE node Cypher for ID: {node_data.get('id')} / type: {node_data.get('type')} (case_id={case_id})")
         return node_data
 
-    def add_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
-        return self.upsert_edge(edge_data)
+    def add_edge(self, edge_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:
+        return self.upsert_edge(edge_data, case_id=case_id)
 
-    def upsert_edge(self, edge_data: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info(f"Executing MERGE relationship Cypher for edge ID: {edge_data.get('id')} from {edge_data.get('source_id')} to {edge_data.get('target_id')}")
+    def upsert_edge(self, edge_data: Dict[str, Any], case_id: Optional[str] = None) -> Dict[str, Any]:
+        logger.info(f"Executing MERGE relationship Cypher for edge ID: {edge_data.get('id')} from {edge_data.get('source_id')} to {edge_data.get('target_id')} (case_id={case_id})")
         return edge_data

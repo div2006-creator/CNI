@@ -9,18 +9,19 @@ router = APIRouter(prefix="/network", tags=["Network Analysis"])
 @router.get("", response_model=NetworkGraphResponse)
 def get_network_graph(
     min_risk: float = Query(0.0, ge=0.0, le=1.0, description="Minimum risk score threshold"),
-    entity_types: Optional[List[str]] = Query(None, description="Entity types filter list")
+    entity_types: Optional[List[str]] = Query(None, description="Entity types filter list"),
+    case_id: Optional[str] = Query(None, description="Optional case identifier filter")
 ):
     """Fetch network graph formatted for visual graph renders (Cytoscape.js)."""
-    raw = graph_driver.get_network_graph(entity_types=entity_types, min_risk=min_risk)
+    raw = graph_driver.get_network_graph(entity_types=entity_types, min_risk=min_risk, case_id=case_id)
 
     nodes = [
         NetworkNode(
             id=n["id"],
-            label=n["name"],
-            type=n["type"],
-            risk_level=n["risk_level"],
-            risk_score=n["risk_score"],
+            label=n.get("name", n["id"]),
+            type=n.get("type", "UNKNOWN"),
+            risk_level=n.get("risk_level", "MEDIUM"),
+            risk_score=n.get("risk_score", 0.5),
             properties=n.get("attributes", {})
         )
         for n in raw["nodes"]
@@ -31,7 +32,7 @@ def get_network_graph(
             id=e["id"],
             source=e["source_id"],
             target=e["target_id"],
-            type=e["type"],
+            type=e.get("type", "ASSOCIATED_WITH"),
             confidence=e.get("confidence", 0.8),
             weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
@@ -49,18 +50,19 @@ def get_network_graph(
 @router.get("/subgraph/{entity_id}", response_model=NetworkGraphResponse)
 def get_entity_subgraph(
     entity_id: str,
-    depth: int = Query(1, ge=1, le=3, description="Exploration depth")
+    depth: int = Query(1, ge=1, le=3, description="Exploration depth"),
+    case_id: Optional[str] = Query(None, description="Optional case identifier filter")
 ):
     """Fetch N-hop connection graph surrounding a target entity."""
-    raw = graph_driver.get_entity_neighbors(entity_id=entity_id, depth=depth)
+    raw = graph_driver.get_entity_neighbors(entity_id=entity_id, depth=depth, case_id=case_id)
 
     nodes = [
         NetworkNode(
             id=n["id"],
-            label=n["name"],
-            type=n["type"],
-            risk_level=n["risk_level"],
-            risk_score=n["risk_score"],
+            label=n.get("name", n["id"]),
+            type=n.get("type", "UNKNOWN"),
+            risk_level=n.get("risk_level", "MEDIUM"),
+            risk_score=n.get("risk_score", 0.5),
             properties=n.get("attributes", {})
         )
         for n in raw["nodes"]
@@ -71,7 +73,7 @@ def get_entity_subgraph(
             id=e["id"],
             source=e["source_id"],
             target=e["target_id"],
-            type=e["type"],
+            type=e.get("type", "ASSOCIATED_WITH"),
             confidence=e.get("confidence", 0.8),
             weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
@@ -89,20 +91,21 @@ def get_entity_subgraph(
 @router.get("/shortest-path", response_model=ShortestPathResponse)
 def get_shortest_path(
     source_id: str = Query(..., description="Source entity ID"),
-    target_id: str = Query(..., description="Target entity ID")
+    target_id: str = Query(..., description="Target entity ID"),
+    case_id: Optional[str] = Query(None, description="Optional case identifier filter")
 ):
     """Compute the shortest investigative link path between two entities."""
-    raw_path = graph_driver.find_shortest_path(source_id=source_id, target_id=target_id)
+    raw_path = graph_driver.find_shortest_path(source_id=source_id, target_id=target_id, case_id=case_id)
     if not raw_path["found"]:
         return ShortestPathResponse(found=False, path_nodes=[], path_edges=[], distance=-1)
 
     nodes = [
         NetworkNode(
             id=n["id"],
-            label=n["name"],
-            type=n["type"],
-            risk_level=n["risk_level"],
-            risk_score=n["risk_score"],
+            label=n.get("name", n["id"]),
+            type=n.get("type", "UNKNOWN"),
+            risk_level=n.get("risk_level", "MEDIUM"),
+            risk_score=n.get("risk_score", 0.5),
             properties=n.get("attributes", {})
         )
         for n in raw_path["path_nodes"]
@@ -113,7 +116,7 @@ def get_shortest_path(
             id=e["id"],
             source=e["source_id"],
             target=e["target_id"],
-            type=e["type"],
+            type=e.get("type", "ASSOCIATED_WITH"),
             confidence=e.get("confidence", 0.8),
             weight=e.get("weight", 1.0),
             properties=e.get("attributes", {})
