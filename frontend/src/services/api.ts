@@ -14,8 +14,13 @@ import {
   AuditLog,
   IngestionSummary,
   RelationshipEvidenceExplanation,
-  SourceDocument
+  SourceDocument,
+  GeocodingResult,
+  PublicNewsResult,
+  AIDocumentAnalysisResult,
+  EnrichmentStatus
 } from '../types';
+
 
 
 import { 
@@ -400,5 +405,87 @@ export const apiService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dossierPayload)
     });
+  },
+
+  geocodeLocation: async (query: string, caseId: string = 'DEMO-CASE-001'): Promise<GeocodingResult> => {
+    const fallback: GeocodingResult = {
+      query,
+      display_name: `${query} (Estimated Location)`,
+      lat: 20.5937,
+      lon: 78.9629,
+      confidence: 0.5,
+      source_type: 'GEOCODING_ENRICHMENT',
+      fact_type: 'ANALYTICAL_INFERENCE',
+      case_id: caseId,
+      provenance: {
+        source_document_id: `MOCK-GEO-${query.substring(0, 10)}`
+      }
+    };
+
+    return fetchWithFallback<GeocodingResult>(`${API_BASE}/enrichment/geocoding`, fallback, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, case_id: caseId })
+    });
+  },
+
+  searchPublicNews: async (keywords: string, caseId: string = 'DEMO-CASE-001', language: string = 'en'): Promise<PublicNewsResult> => {
+    const fallback: PublicNewsResult = {
+      query: keywords,
+      total_results: 1,
+      articles: [
+        {
+          title: `Open-Source News Summary: ${keywords}`,
+          url: `https://public-news-archive.org/search?q=${keywords}`,
+          snippet: `Public reports mention entities related to '${keywords}'. Unverified third-party information.`,
+          publisher: 'Intelligence News Wire',
+          published_at: new Date().toISOString()
+        }
+      ],
+      confidence: 0.5,
+      source_type: 'EXTERNAL_PUBLIC_SOURCE',
+      fact_type: 'ANALYTICAL_INFERENCE',
+      case_id: caseId,
+      disclaimer: 'External news search results are unverified third-party reports, not verified document facts.'
+    };
+
+    return fetchWithFallback<PublicNewsResult>(`${API_BASE}/enrichment/news`, fallback, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keywords, case_id: caseId, language })
+    });
+  },
+
+  analyzeDocumentAI: async (documentText: string, caseId: string = 'DEMO-CASE-001', documentId?: string): Promise<AIDocumentAnalysisResult> => {
+    const fallback: AIDocumentAnalysisResult = {
+      summary: `Analyzed document text of ${documentText.length} characters.`,
+      risk_level: 'MEDIUM',
+      extracted_entities: [],
+      extracted_relationships: [],
+      source_type: 'AI_EXTRACTION',
+      fact_type: 'ANALYTICAL_INFERENCE',
+      case_id: caseId,
+      provenance: {
+        source_document_id: documentId || `DOC-AI-${caseId}`
+      },
+      safety_disclaimer: 'AI extractions are analytical inferences and require human investigator verification.'
+    };
+
+
+    return fetchWithFallback<AIDocumentAnalysisResult>(`${API_BASE}/enrichment/ai-analyze`, fallback, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ document_text: documentText, case_id: caseId, document_id: documentId })
+    });
+  },
+
+  getEnrichmentStatus: async (): Promise<EnrichmentStatus[]> => {
+    const fallback: EnrichmentStatus[] = [
+      { provider: 'NominatimGeocoding', enabled: true, status: 'ACTIVE' },
+      { provider: 'PublicNewsSearch', enabled: true, status: 'OFFLINE_FALLBACK' },
+      { provider: 'AIDocumentAnalyzer', enabled: true, status: 'ACTIVE' }
+    ];
+    return fetchWithFallback<EnrichmentStatus[]>(`${API_BASE}/enrichment/status`, fallback);
   }
 };
+

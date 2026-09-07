@@ -38,6 +38,16 @@ class Settings(BaseSettings):
     ENTITY_CONFIDENCE_THRESHOLD: float = 0.75
     PATTERN_RISK_THRESHOLD: float = 0.60
 
+    # External APIs (Phase 4)
+    GEOCODING_ENABLED: bool = True
+    NOMINATIM_USER_AGENT: str = "CNI-Intelligence-Platform/2.0"
+    NEWS_API_ENABLED: bool = True
+    NEWS_API_KEY: str = ""
+    AI_EXTRACTION_ENABLED: bool = True
+    AI_PROVIDER: str = "mock"
+    AI_API_KEY: str = ""
+
     model_config = ConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
+

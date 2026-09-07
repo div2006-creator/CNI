@@ -21,8 +21,10 @@ from app.api import (
     data_sources,
     ingest,
     analytics,
-    predictive
+    predictive,
+    enrichment
 )
+
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -80,6 +82,8 @@ app.include_router(data_sources.router, prefix=settings.API_PREFIX)
 app.include_router(ingest.router, prefix=settings.API_PREFIX)
 app.include_router(analytics.router, prefix=settings.API_PREFIX)
 app.include_router(predictive.router, prefix=settings.API_PREFIX)
+app.include_router(enrichment.router, prefix=settings.API_PREFIX)
+
 
 @app.get("/")
 def root():

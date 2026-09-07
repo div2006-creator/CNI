@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Bell, Shield, Database, Cpu } from 'lucide-react';
+import { Search, Bell, Shield, Database, Cpu, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Alert, SystemHealth } from '../../types';
 import { apiService } from '../../services/api';
@@ -8,13 +8,16 @@ interface HeaderProps {
   healthStatus?: SystemHealth | null;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  onOpenEnrichment?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   healthStatus,
   searchQuery,
-  setSearchQuery
+  setSearchQuery,
+  onOpenEnrichment
 }) => {
+
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -58,6 +61,19 @@ export const Header: React.FC<HeaderProps> = ({
             4
           </span>
         </button>
+
+        {/* External Enrichment Button */}
+        {onOpenEnrichment && (
+          <button
+            onClick={onOpenEnrichment}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 rounded-xl transition shadow-xs"
+            title="External Intelligence & AI Enrichment"
+          >
+            <Globe className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Enrich Case</span>
+          </button>
+        )}
+
 
         {/* Investigator Profile */}
         <div className="flex items-center gap-3 border-l border-[#e5dfd3] pl-4">

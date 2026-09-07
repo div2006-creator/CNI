@@ -439,3 +439,73 @@ export interface IngestionSummary {
   case_id?: string;
 }
 
+export interface GeocodingResult {
+  query: string;
+  display_name: string;
+  lat: number;
+  lon: number;
+  boundingbox?: string[];
+  address_details?: Record<string, any>;
+  confidence: number;
+  source_type: string;
+  fact_type: FactType;
+  case_id: string;
+  provenance: EvidenceProvenance;
+}
+
+export interface NewsArticle {
+  title: string;
+  url: string;
+  snippet: string;
+  publisher: string;
+  published_at?: string;
+}
+
+export interface PublicNewsResult {
+  query: string;
+  total_results: number;
+  articles: NewsArticle[];
+  confidence: number;
+  source_type: string;
+  fact_type: FactType;
+  case_id: string;
+  disclaimer: string;
+}
+
+export interface ExtractedEntityItem {
+  entity_name: string;
+  entity_type: string;
+  start_char: number;
+  end_char: number;
+  confidence: number;
+}
+
+export interface ExtractedRelationshipItem {
+  source_entity: string;
+  target_entity: string;
+  relationship_type: string;
+  confidence: number;
+  fact_type: FactType;
+}
+
+export interface AIDocumentAnalysisResult {
+  summary: string;
+  risk_level: string;
+  extracted_entities: ExtractedEntityItem[];
+  extracted_relationships: ExtractedRelationshipItem[];
+  source_type: string;
+  fact_type: FactType;
+  case_id: string;
+  provenance: EvidenceProvenance;
+  safety_disclaimer: string;
+
+}
+
+export interface EnrichmentStatus {
+  provider: string;
+  enabled: boolean;
+  status: string;
+  details?: string;
+}
+
+

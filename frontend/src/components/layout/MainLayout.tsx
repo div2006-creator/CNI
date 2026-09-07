@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { ExternalEnrichmentModal } from '../enrichment/ExternalEnrichmentModal';
 import { apiService } from '../../services/api';
 import { SystemHealth } from '../../types';
 
@@ -11,6 +12,7 @@ interface MainLayoutProps {
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [healthStatus, setHealthStatus] = useState<SystemHealth | null>(null);
+  const [isEnrichmentModalOpen, setIsEnrichmentModalOpen] = useState(false);
 
   useEffect(() => {
     apiService.getHealth().then(setHealthStatus).catch(console.error);
@@ -27,11 +29,19 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           healthStatus={healthStatus}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          onOpenEnrichment={() => setIsEnrichmentModalOpen(true)}
         />
         <main className="flex-1 p-5 lg:p-8 max-w-[1700px] w-full mx-auto overflow-y-auto">
           {children}
         </main>
       </div>
+
+      <ExternalEnrichmentModal
+        isOpen={isEnrichmentModalOpen}
+        onClose={() => setIsEnrichmentModalOpen(false)}
+        currentCaseId="DEMO-CASE-001"
+      />
     </div>
   );
 };
+
